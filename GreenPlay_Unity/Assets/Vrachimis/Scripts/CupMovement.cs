@@ -8,8 +8,13 @@ public class CupMovement : MonoBehaviour {
 	public Transform[] wayPointList;
 	public int currentWayPoint = 0; 
 	public float speed = 4f;
+	// Maximum turn rate in degrees per second.
+	public float turningRate = 30f; 
 
 	Transform targetWayPoint;
+
+	// Rotation we should blend towards.
+	private Quaternion _targetRotation = Quaternion.identity;
 
 	private Vector3 dir;
 	private float angle;
@@ -28,9 +33,19 @@ public class CupMovement : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		dir = center.transform.position - transform.position;
-		angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-		transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
+
+		if ((transform.position.y < 0) && (transform.position.x > -1f) && (transform.position.x < 1f)) //ro
+		{
+			dir = center.transform.position - transform.position;
+			angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+			transform.rotation = Quaternion.AngleAxis(angle - 270, Vector3.forward);
+
+		} else
+		{
+			RotateObject(Vector3.down);
+		}
+
+		transform.rotation = Quaternion.RotateTowards(transform.rotation, _targetRotation, turningRate * Time.deltaTime);
 
 		// check if we have somewere to walk
 		if(currentWayPoint < this.wayPointList.Length)
@@ -39,6 +54,10 @@ public class CupMovement : MonoBehaviour {
 				targetWayPoint = wayPointList[currentWayPoint];
 			walk();
 		}
+
+		Vector3 targetUp = new Vector3(center.transform.position.x, center.transform.position.y, 0);
+		float damping = 4;
+		transform.up = Vector3.Slerp(transform.up, targetUp, Time.deltaTime * damping);
 	}
 
 	void walk(){
@@ -54,6 +73,29 @@ public class CupMovement : MonoBehaviour {
 			targetWayPoint = wayPointList[currentWayPoint];
 		}
 
-		if (currentWayPoint == 8) currentWayPoint = 0;
+		if (currentWayPoint == wayPointList.Length-1) currentWayPoint = 0; //keep going around the waypoints
+	}
+
+	//make atoms childs so that they stay together
+	void OnCollisionEnter2D(Collision2D coll)
+	{
+		if (coll.gameObject.tag == "atom")
+		{
+			coll.gameObject.transform.parent = this.transform;
+		}
+	}
+
+	//remove atoms from childs to moe on their own
+	void OnCollisionExit2D(Collision2D coll)
+	{
+		if (coll.gameObject.tag == "atom")
+		{
+			coll.gameObject.transform.parent = null;
+		}
+	}
+
+	void RotateObject(Vector3 angles)
+	{
+		_targetRotation = Quaternion.Euler(angles);
 	}
 }
