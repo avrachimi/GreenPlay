@@ -22,23 +22,31 @@ public class CupMovement : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		
-		/*UpdatePosition = true;
-		DelayUpdatePos = 1;
-		FirstYPos = 5;
-		MovementSpeed = 5;*/
 
-		//iTween.MoveTo(this.gameObject,iTween.Hash("path",iTweenPath.GetPath("CupPath"),"time",20));
 	
 	}
 	
 	// Update is called once per frame
 	void Update () {
 
-		if ((transform.position.y < 0) && (transform.position.x > -1f) && (transform.position.x < 1f)) //ro
+		if ((transform.position.y < 0) && (transform.position.x > -0.8f) && (transform.position.x < 0.8f)) //ro
 		{
+			//make cup look at the tree
 			dir = center.transform.position - transform.position;
 			angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 			transform.rotation = Quaternion.AngleAxis(angle - 270, Vector3.forward);
+
+			//remove all childs, except the filter
+			for (var i = transform.childCount - 1; i >= 0; i--)
+			{
+				// objectA is not the attached GameObject, so you can do all your checks with it.
+				Transform objectA = transform.GetChild(i);
+				if (objectA.name != "CupFilter")
+				{
+					objectA.transform.parent = null;
+					
+				}
+			}
 
 		} else
 		{
@@ -55,16 +63,14 @@ public class CupMovement : MonoBehaviour {
 			walk();
 		}
 
+		//move cup smoothly back into its original rotation
 		Vector3 targetUp = new Vector3(center.transform.position.x, center.transform.position.y, 0);
 		float damping = 4;
 		transform.up = Vector3.Slerp(transform.up, targetUp, Time.deltaTime * damping);
 	}
 
 	void walk(){
-		// rotate towards the target
-		//transform.forward = Vector3.RotateTowards(transform.forward, targetWayPoint.position - transform.position, speed*Time.deltaTime, 0.0f);
-
-		// move towards the target
+		// move towards the next waypoint
 		transform.position = Vector3.MoveTowards(transform.position, targetWayPoint.position,   speed*Time.deltaTime);
 
 		if(transform.position == targetWayPoint.position)

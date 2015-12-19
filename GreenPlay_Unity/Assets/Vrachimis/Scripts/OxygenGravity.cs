@@ -15,16 +15,15 @@ public class OxygenGravity : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		//GetComponent<Rigidbody2D>().AddForce((gravityObject.transform.position - transform.position).normalized * acceleration);
-		//GetComponent<Rigidbody2D>().AddForce(new Vector2(0,0.5f));
+
+		//add gravity
 		GetComponent<Rigidbody2D>().gravityScale = -acceleration;
-		//GetComponent<Rigidbody2D>().velocity = new Vector2(0,0);
 	}
 
 	void FixedUpdate() {
-		RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.up);
+		RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up, 2f);
 		if (hit.collider != null) {
-			//adsf
+			//Debug.DrawLine(transform.position, transform.position,Color.blue);
 		}
 	}
 }
