@@ -48,18 +48,22 @@ public class CupMovement : MonoBehaviour {
 				}
 			}
 
-		} else
+		} else //rotate object downwards
 		{
 			RotateObject(Vector3.down);
 		}
 
+		//NOT SURE IF THIS IS NEEDED. TEST LATER
 		transform.rotation = Quaternion.RotateTowards(transform.rotation, _targetRotation, turningRate * Time.deltaTime);
 
-		// check if we have somewere to walk
+		// check if there is a waypoint in the list
 		if(currentWayPoint < this.wayPointList.Length)
 		{
 			if(targetWayPoint == null)
+			{
 				targetWayPoint = wayPointList[currentWayPoint];
+				Debug.Log("Waypoint was empty. Object: " + gameObject.name);
+			}
 			walk();
 		}
 
@@ -71,12 +75,16 @@ public class CupMovement : MonoBehaviour {
 
 	void walk(){
 		// move towards the next waypoint
-		transform.position = Vector3.MoveTowards(transform.position, targetWayPoint.position,   speed*Time.deltaTime);
+		//transform.position = Vector3.MoveTowards(transform.position, targetWayPoint.position,   speed*Time.deltaTime);
+
+		Vector2 direction = (targetWayPoint.position - transform.position).normalized;
+		GetComponent<Rigidbody2D>().MovePosition(new Vector2(transform.position.x,transform.position.y)  + direction * speed * Time.deltaTime);
 
 		if(transform.position == targetWayPoint.position)
 		{
 			currentWayPoint ++ ;
 			targetWayPoint = wayPointList[currentWayPoint];
+			Debug.Log("Added the next waypoint(" + currentWayPoint + "). Object: " + gameObject.name);
 		}
 
 		if (currentWayPoint == wayPointList.Length-1) currentWayPoint = 0; //keep going around the waypoints
