@@ -15,6 +15,8 @@ public class CupMovement : MonoBehaviour {
 
 	// Rotation we should blend towards.
 	private Quaternion _targetRotation = Quaternion.identity;
+	private Rigidbody2D rb2d;
+	private float timer;
 
 	private Vector3 dir;
 	private float angle;
@@ -22,7 +24,7 @@ public class CupMovement : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		
-
+		rb2d  = GetComponent<Rigidbody2D>();
 	
 	}
 	
@@ -32,6 +34,7 @@ public class CupMovement : MonoBehaviour {
 		if ((transform.position.y < 0) && (transform.position.x > -0.8f) && (transform.position.x < 0.8f)) //ro
 		{
 			//make cup look at the tree
+			//RIGIDBODY.MOVEROTATION
 			dir = center.transform.position - transform.position;
 			angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 			transform.rotation = Quaternion.AngleAxis(angle - 270, Vector3.forward);
@@ -64,6 +67,7 @@ public class CupMovement : MonoBehaviour {
 				targetWayPoint = wayPointList[currentWayPoint];
 				Debug.Log("Waypoint was empty. Object: " + gameObject.name);
 			}
+			timer += Time.fixedDeltaTime;
 			walk();
 		}
 
@@ -73,12 +77,19 @@ public class CupMovement : MonoBehaviour {
 		transform.up = Vector3.Slerp(transform.up, targetUp, Time.deltaTime * damping);
 	}
 
+	void FixedUpdate()
+	{
+		
+	}
+
 	void walk(){
-		// move towards the next waypoint
+		// move towards the next waypsoint
 		//transform.position = Vector3.MoveTowards(transform.position, targetWayPoint.position,   speed*Time.deltaTime);
 
-		Vector2 direction = (targetWayPoint.position - transform.position).normalized;
-		GetComponent<Rigidbody2D>().MovePosition(new Vector2(transform.position.x,transform.position.y)  + direction * speed * Time.deltaTime);
+		Vector2 dir = (targetWayPoint.position - transform.position);
+		rb2d.AddForce(dir * speed * Time.deltaTime);
+		//rb2d.MovePosition(new Vector2(transform.position.x,transform.position.y)  + dir * speed / 5);
+		//rb2d.MovePosition(new Vector2(Mathf.Lerp(rb2d.position.x, rb2d.position.x + dir.x, timer),Mathf.Lerp(rb2d.position.y, rb2d.position.y + dir.y, timer)));
 
 		if(transform.position == targetWayPoint.position)
 		{
