@@ -59,6 +59,16 @@ public class CupMovement : MonoBehaviour {
 		//NOT SURE IF THIS IS NEEDED. TEST LATER
 		transform.rotation = Quaternion.RotateTowards(transform.rotation, _targetRotation, turningRate * Time.deltaTime);
 
+
+
+		//move cup smoothly back into its original rotation
+		Vector3 targetUp = new Vector3(center.transform.position.x, center.transform.position.y, 0);
+		float damping = 4;
+		transform.up = Vector3.Slerp(transform.up, targetUp, Time.deltaTime * damping);
+	}
+
+	void FixedUpdate()
+	{
 		// check if there is a waypoint in the list
 		if(currentWayPoint < this.wayPointList.Length)
 		{
@@ -70,16 +80,6 @@ public class CupMovement : MonoBehaviour {
 			timer += Time.fixedDeltaTime;
 			walk();
 		}
-
-		//move cup smoothly back into its original rotation
-		Vector3 targetUp = new Vector3(center.transform.position.x, center.transform.position.y, 0);
-		float damping = 4;
-		transform.up = Vector3.Slerp(transform.up, targetUp, Time.deltaTime * damping);
-	}
-
-	void FixedUpdate()
-	{
-		
 	}
 
 	void walk(){
@@ -87,8 +87,8 @@ public class CupMovement : MonoBehaviour {
 		//transform.position = Vector3.MoveTowards(transform.position, targetWayPoint.position,   speed*Time.deltaTime);
 
 		Vector2 dir = (targetWayPoint.position - transform.position);
-		rb2d.AddForce(dir * speed * Time.deltaTime);
-		//rb2d.MovePosition(new Vector2(transform.position.x,transform.position.y)  + dir * speed / 5);
+		//rb2d.AddForce(dir  * speed * Time.deltaTime);
+		rb2d.MovePosition(new Vector2(transform.position.x,transform.position.y)  + dir * speed / 5 * Time.fixedDeltaTime);
 		//rb2d.MovePosition(new Vector2(Mathf.Lerp(rb2d.position.x, rb2d.position.x + dir.x, timer),Mathf.Lerp(rb2d.position.y, rb2d.position.y + dir.y, timer)));
 
 		if(transform.position == targetWayPoint.position)
@@ -98,7 +98,7 @@ public class CupMovement : MonoBehaviour {
 			Debug.Log("Added the next waypoint(" + currentWayPoint + "). Object: " + gameObject.name);
 		}
 
-		if (currentWayPoint == wayPointList.Length-1) currentWayPoint = 0; //keep going around the waypoints
+		if (currentWayPoint == wayPointList.Length-1) currentWayPoint = -1; //keep going around the waypoints
 	}
 
 	//make atoms childs so that they stay together
