@@ -13,7 +13,7 @@ public class CupFilterSetChild : MonoBehaviour {
 	
 	}
 
-	void OnTriggerEnter2D(Collider2D coll)
+	/*void OnTriggerEnter2D(Collider2D coll)
 	{
 		if (coll.gameObject.tag == "atom")
 		{
@@ -28,5 +28,5 @@ public class CupFilterSetChild : MonoBehaviour {
 		{
 			coll.gameObject.transform.parent = null;
 		}
-	}
+	}*/
 }
