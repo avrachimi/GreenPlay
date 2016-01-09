@@ -32,6 +32,7 @@ public class CupMovement : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+		direction = center.transform.position - transform.position;
 		float ang = Vector2.Angle(rb2d.transform.position, direction);
 
 		if ((transform.position.y < 0) && (transform.position.x > -0.8f) && (transform.position.x < 0.8f)) //rotate towards the tree in the center
@@ -39,17 +40,12 @@ public class CupMovement : MonoBehaviour {
 
 			//make cup look at the tree
 			//RIGIDBODY.MOVEROTATION
-			direction = center.transform.position - transform.position;
-			angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-			//transform.rotation = Quaternion.AngleAxis(angle - 270, Vector3.forward);
+
 
 			Vector3 cross = Vector3.Cross(rb2d.transform.position, direction);
 
-			if (cross.z > 0)
-				ang = 360 - ang;
-			
-			Quaternion deltaRotation = Quaternion.Euler(new Vector3(0,ang,0));
-			rb2d.MoveRotation(ang * Time.deltaTime);
+			if (cross.z > 0) ang = 360 - ang;
+			rb2d.MoveRotation(ang);
 			//remove all childs, except the filter
 			/*for (var i = transform.childCount - 1; i >= 0; i--)
 			{
