@@ -6,18 +6,19 @@ public class OxygenGravity : MonoBehaviour {
 	public GameObject gravityObject;
 	public float acceleration = 9.81f;
 
+	private Rigidbody2D rb2d;
+
 	private Transform lastPosition;
 
 	// Use this for initialization
 	void Start () {
-	
+		rb2d = GetComponent<Rigidbody2D>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-
 		//add gravity
-		GetComponent<Rigidbody2D>().gravityScale = -acceleration;
+		rb2d.gravityScale = -acceleration;
 	}
 
 	void FixedUpdate() {

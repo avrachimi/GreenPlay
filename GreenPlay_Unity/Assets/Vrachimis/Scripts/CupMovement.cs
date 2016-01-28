@@ -18,6 +18,7 @@ public class CupMovement : MonoBehaviour {
 	private Quaternion _targetRotation = Quaternion.identity;
 	private Rigidbody2D rb2d;
 	private float timer;
+	private float ang = 0f;
 	float lastDistanceToTarget = 0f;
 	private Vector3 direction;
 	private float angle;
@@ -26,6 +27,7 @@ public class CupMovement : MonoBehaviour {
 	void Start () {
 		
 		rb2d  = GetComponent<Rigidbody2D>();
+		//invokeRepeating
 	
 	}
 	
@@ -33,9 +35,9 @@ public class CupMovement : MonoBehaviour {
 	void Update () {
 
 		direction = center.transform.position - transform.position;
-		float ang = Vector2.Angle(rb2d.transform.position, direction);
+		ang = Vector2.Angle(rb2d.transform.position, direction);
 
-		if ((transform.position.y < 0) && (transform.position.x > -0.8f) && (transform.position.x < 0.8f)) //rotate towards the tree in the center
+		if ((transform.position.y < 0) && (transform.position.x > -1.5f) && (transform.position.x < 1.5f)) //rotate towards the tree in the center
 		{
 
 			//make cup look at the tree
@@ -45,7 +47,8 @@ public class CupMovement : MonoBehaviour {
 			Vector3 cross = Vector3.Cross(rb2d.transform.position, direction);
 
 			if (cross.z > 0) ang = 360 - ang;
-			rb2d.MoveRotation(ang);
+			//rb2d.MoveRotation(ang);
+			transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0,0,ang), 2000 * Time.deltaTime);
 			//remove all childs, except the filter
 			/*for (var i = transform.childCount - 1; i >= 0; i--)
 			{
@@ -53,7 +56,9 @@ public class CupMovement : MonoBehaviour {
 				Transform objectA = transform.GetChild(i);
 				if (objectA.name != "CupFilter")
 				{
-					objectA.transform.parent = null;
+					//objectA.transform.parent = null;
+					Rigidbody2D temp = objectA.GetComponent<Rigidbody2D>();
+					temp.velocity = new Vector2(0,temp.velocity.y);
 					
 				}
 			}*/
@@ -61,7 +66,8 @@ public class CupMovement : MonoBehaviour {
 		} else //rotate object downwards
 		{
 			//RotateObject(Vector3.down);
-			rb2d.MoveRotation(0);
+			//rb2d.MoveRotation(0);
+			transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0,0,0), 2000 * Time.deltaTime);
 		}
 
 		//NOT SURE IF THIS IS NEEDED. TEST LATER
@@ -73,6 +79,19 @@ public class CupMovement : MonoBehaviour {
 		/*Vector3 targetUp = new Vector3(center.transform.position.x, center.transform.position.y, 0);
 		float damping = 4;
 		transform.up = Vector3.Slerp(transform.up, targetUp, Time.deltaTime * damping);*/
+
+		//touchInput();
+	}
+
+	void touchInput()
+	{
+		Vector3 pos = Camera.main.ScreenToWorldPoint (Input.mousePosition);
+		RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero);
+		if (hit != null && hit.collider != null) {
+			Debug.Log ("I'm hitting "+hit.collider.name);
+			//LATER: make sure to check if hitting pause or mute button
+
+		}
 	}
 
 	void FixedUpdate()
@@ -83,10 +102,11 @@ public class CupMovement : MonoBehaviour {
 			if(targetWayPoint == null)
 			{
 				targetWayPoint = wayPointList[currentWayPoint];
-				Debug.Log("Waypoint was empty. Object: " + gameObject.name);
+				//Debug.Log("Waypoint was empty. Object: " + gameObject.name);
 			}
 			walk();
 		}
+
 	}
 
 
@@ -103,7 +123,7 @@ public class CupMovement : MonoBehaviour {
 			}
 			targetWayPoint = wayPointList[currentWayPoint];
 			lastDistanceToTarget = Vector3.Distance(transform.position, targetWayPoint.position);
-			Debug.Log("Added the next waypoint(" + currentWayPoint + "). Object: " + gameObject.name);
+			//Debug.Log("Added the next waypoint(" + currentWayPoint + "). Object: " + gameObject.name);
 		}else{
 			lastDistanceToTarget = distanceToTarget;
 		}
