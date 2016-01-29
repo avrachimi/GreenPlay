@@ -11,7 +11,20 @@ public class openCircleDoor : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		touchInput();
+		//touchInput();
+
+		int fingerCount = 0;
+		foreach (Touch touch in Input.touches) {
+			if (touch.phase != TouchPhase.Ended && touch.phase != TouchPhase.Canceled)
+				fingerCount++;
+
+		}
+		if (fingerCount > 0) {
+			rb2d.MoveRotation(-90f);
+		}
+		else {
+			rb2d.MoveRotation(0f);
+		}
 	}
 
 	void touchInput()
@@ -27,6 +40,9 @@ public class openCircleDoor : MonoBehaviour {
 			} else {
 				rb2d.MoveRotation(0f);
 			}
+		}
+		else {
+			rb2d.MoveRotation(0f);
 		}
 	}
 }

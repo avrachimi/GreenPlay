@@ -6,6 +6,7 @@ public class CupMovement : MonoBehaviour {
 
 	public GameObject center;
 	public Transform[] wayPointList;
+	public Transform exitWaypoint;
 	public int currentWayPoint = 0; 
 	public float speed = 4f;
 	// Maximum turn rate in degrees per second.
@@ -22,12 +23,23 @@ public class CupMovement : MonoBehaviour {
 	float lastDistanceToTarget = 0f;
 	private Vector3 direction;
 	private float angle;
+	private bool stopWaypoints;
+	private bool doesCollide;
 
 	// Use this for initialization
 	void Start () {
-		
+
+		for (int x = 1; x <= 8; x++) {
+			wayPointList[x-1] = GameObject.Find("Waypoint " + x).transform;
+		}
+		center = GameObject.Find("circleTree");
+		exitWaypoint = GameObject.Find("Exit Waypoint").transform;
+
+		stopWaypoints = false;
+		doesCollide = false;
 		rb2d  = GetComponent<Rigidbody2D>();
 		//invokeRepeating
+		InvokeRepeating("incrementSpeed",20,15);
 	
 	}
 	
@@ -37,48 +49,28 @@ public class CupMovement : MonoBehaviour {
 		direction = center.transform.position - transform.position;
 		ang = Vector2.Angle(rb2d.transform.position, direction);
 
-		if ((transform.position.y < 0) && (transform.position.x > -1.5f) && (transform.position.x < 1.5f)) //rotate towards the tree in the center
+		if ((transform.position.y < 0) && (transform.position.x > -1.4f) && (transform.position.x < 1.5f)) //rotate towards the tree in the center
 		{
-
-			//make cup look at the tree
-			//RIGIDBODY.MOVEROTATION
-
 
 			Vector3 cross = Vector3.Cross(rb2d.transform.position, direction);
 
 			if (cross.z > 0) ang = 360 - ang;
 			//rb2d.MoveRotation(ang);
-			transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0,0,ang), 2000 * Time.deltaTime);
-			//remove all childs, except the filter
-			/*for (var i = transform.childCount - 1; i >= 0; i--)
-			{
-				// objectA is not the attached GameObject, so you can do all your checks with it.
-				Transform objectA = transform.GetChild(i);
-				if (objectA.name != "CupFilter")
-				{
-					//objectA.transform.parent = null;
-					Rigidbody2D temp = objectA.GetComponent<Rigidbody2D>();
-					temp.velocity = new Vector2(0,temp.velocity.y);
-					
-				}
-			}*/
+			transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0,0,ang), 1000 * Time.deltaTime);
+			doesCollide = false;
 
-		} else //rotate object downwards
-		{
+		} 
+		else if ((transform.position.y > 0) && (transform.position.x < -1.5f) && (doesCollide == false)) {
+			stopWaypoints = true;
+		}
+		else {
 			//RotateObject(Vector3.down);
 			//rb2d.MoveRotation(0);
-			transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0,0,0), 2000 * Time.deltaTime);
+			transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0,0,0), 1000 * Time.deltaTime);
 		}
 
 		//NOT SURE IF THIS IS NEEDED. TEST LATER
 		//transform.rotation = Quaternion.RotateTowards(transform.rotation, _targetRotation, turningRate * Time.deltaTime);
-
-
-
-		//move cup smoothly back into its original rotation
-		/*Vector3 targetUp = new Vector3(center.transform.position.x, center.transform.position.y, 0);
-		float damping = 4;
-		transform.up = Vector3.Slerp(transform.up, targetUp, Time.deltaTime * damping);*/
 
 		//touchInput();
 	}
@@ -90,7 +82,9 @@ public class CupMovement : MonoBehaviour {
 		if (hit != null && hit.collider != null) {
 			Debug.Log ("I'm hitting "+hit.collider.name);
 			//LATER: make sure to check if hitting pause or mute button
-
+			if (hit.collider.name == "restart") {
+				exit();
+			}
 		}
 	}
 
@@ -104,7 +98,12 @@ public class CupMovement : MonoBehaviour {
 				targetWayPoint = wayPointList[currentWayPoint];
 				//Debug.Log("Waypoint was empty. Object: " + gameObject.name);
 			}
-			walk();
+			if (stopWaypoints == false) {
+				walk();
+			}
+			else if (stopWaypoints) {
+				exit();
+			}
 		}
 
 	}
@@ -124,36 +123,56 @@ public class CupMovement : MonoBehaviour {
 			targetWayPoint = wayPointList[currentWayPoint];
 			lastDistanceToTarget = Vector3.Distance(transform.position, targetWayPoint.position);
 			//Debug.Log("Added the next waypoint(" + currentWayPoint + "). Object: " + gameObject.name);
-		}else{
+		}
+		else {
 			lastDistanceToTarget = distanceToTarget;
 		}
 
 		//Get direction to the waypoint.
 		//Normalize so it doesn't change with distance.
 		Vector3 dir = (targetWayPoint.position - transform.position).normalized;
-
+	
 		//(speed * Time.fixedDeltaTime) makes the object move by 'speed' units per second, framerate independent
 		rb2d.MovePosition(transform.position + dir * (speed * Time.fixedDeltaTime));
 
 	}
 
-	/*
-	//make atoms childs so that they stay together
-	void OnCollisionEnter2D(Collision2D coll)
+	void exit()
 	{
-		if (coll.gameObject.tag == "atom")
-		{
-			coll.gameObject.transform.parent = this.transform;
+		Vector3 direct = (exitWaypoint.position - transform.position).normalized;
+		rb2d.MovePosition(transform.position + direct * (speed * Time.fixedDeltaTime));
+		//transform.Translate(new Vector3(-5,0,0) * Time.deltaTime);
+
+		if (transform.position.x < -4.8f) Destroy(transform.parent.gameObject);
+	}
+
+	void incrementSpeed()
+	{
+		speed += 0.1f;
+	}
+
+
+	//make atoms childs so that they stay together
+	/*void OnCollisionEnter2D(Collision2D coll)
+	{
+		if (coll.collider.gameObject.tag == "atom") {
+			
+			doesCollide = true;
+		}
+	}*/
+
+	void OnTriggerEnter2D(Collider2D coll)
+	{
+		if (coll.gameObject.tag == "atom") {
+			
+			doesCollide = true;
+			Debug.Log("TRIGGEEERRRRR");
 		}
 	}
 
-	//remove atoms from childs to moe on their own
-	void OnCollisionExit2D(Collision2D coll)
+	/*void OnCollisionExit2D(Collision2D coll)
 	{
-		if (coll.gameObject.tag == "atom")
-		{
-			coll.gameObject.transform.parent = null;
-		}
+		doesCollide = false;
 	}*/
 
 	void RotateObject(Vector3 angles)
