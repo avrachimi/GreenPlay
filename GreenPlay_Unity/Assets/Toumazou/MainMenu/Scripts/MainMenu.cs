@@ -8,53 +8,36 @@ using System.Collections;
 
 public class MainMenu : MonoBehaviour {
 	//variables
+
+	public float playX;
+	public float playY;
+	public float shopX;
+	public float shopY;
+	public float noadsX;
+	public float noadsY;
+
+	public GameObject play_button;
+	public GameObject ads_button;
+	public GameObject shop_button;
+	public GameObject playTest;
+	public GameObject shopTest;
+	public GameObject noadsTest;
 	public Texture background;
-	public GUIStyle PlayButtonTexture;//image of play button
-	public GUIStyle OptionsButtonTexture;//image of options button
-	public GUIStyle LeaderboardButtonTexture;//image of leaderboard button
-	public GUIStyle ShopButtonTexture;//image of Shop button
-	public float PlayButtonPlacementY; // y position of the button play
-	public float OptionsButtonPlacementY; // y position of the button options
-
-	public float PlayButtonPlacementX; // x position of the button play
-	public float OptionsButtonPlacementX; // x position of the button options
-
-	public float LeaderboardButtonPlacementY; // y position of the button Leaderboard
-	public float LeaderboardButtonPlacementX; // x position of the button Leaderboard
-
-	public float ShopButtonPlacementY; // y position of the button Shop
-	public float ShopButtonPlacementX; // x position of the button Shop
-
-	void OnGUI(){
-	//Display our background texture
-		GUI.DrawTexture(new Rect(0,0,Screen.width,Screen.height), background); 
-
-	//Display our buttons with textures
-		if (GUI.Button (new Rect(Screen.width * PlayButtonPlacementX, Screen.height * PlayButtonPlacementY,Screen.width * .6f, Screen.height * .2f) ,"", PlayButtonTexture)){
-			print ("Clicked");
-		}
-
-		if (GUI.Button (new Rect(Screen.width * OptionsButtonPlacementX, Screen.height * OptionsButtonPlacementY,Screen.width * .1f, Screen.height * .06f) ,"", OptionsButtonTexture)){
-			print ("Clicked");
-		}
-
-		if (GUI.Button (new Rect(Screen.width * LeaderboardButtonPlacementX, Screen.height * LeaderboardButtonPlacementY,Screen.width * .24f, Screen.height * .10125f) ,"", LeaderboardButtonTexture)){
-			print ("Clicked");
-		}
-
-		if (GUI.Button (new Rect(Screen.width * ShopButtonPlacementX, Screen.height * ShopButtonPlacementY,Screen.width * .24f, Screen.height * .10125f) ,"", ShopButtonTexture)){
-			print ("Clicked");
-		}
-
-	}
 
 	// Use this for initialization
 	void Start () {
-	
+		Instantiate (play_button, new Vector3 (-.1f,.58f , 0), Quaternion.identity);
+		Instantiate (ads_button, new Vector3 (0, 0, 0), Quaternion.identity);
+		Instantiate (shop_button, new Vector3 (1.24f, -0.9f, 0), Quaternion.identity);
+		playTest = GameObject.Find("play_button(Clone)");
+		shopTest = GameObject.Find ("shop_button(Clone)");
+		noadsTest = GameObject.Find ("ads_button(Clone)");
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
-	
+		playTest.transform.position = new Vector3 (playX, playY, 0);
+		shopTest.transform.position = new Vector3 (shopX, shopY, 0);
+		noadsTest.transform.position = new Vector3 (noadsX, noadsY, 0);
 	}
 }
