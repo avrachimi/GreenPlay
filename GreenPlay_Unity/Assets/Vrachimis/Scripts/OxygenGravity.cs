@@ -6,6 +6,7 @@ public class OxygenGravity : MonoBehaviour {
 	public GameObject gravityObject;
 	public float acceleration = 9.81f;
 	public Sprite carbon;
+	public Sprite oxygen;
 
 
 	private Rigidbody2D rb2d;
@@ -27,6 +28,9 @@ public class OxygenGravity : MonoBehaviour {
 		if ((transform.position.x < -1.5f) && (transform.position.y < 1) && (transform.position.y > -1)) {
 			spriteRenderer.sprite = carbon;
 			Debug.Log("HI");
+		}
+		else {
+			spriteRenderer.sprite = oxygen;
 		}
 	}
 

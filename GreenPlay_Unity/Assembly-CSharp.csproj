@@ -46,9 +46,11 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Toumazou\MainMenu\Scripts\MainMenu.cs" />
+     <Compile Include="Assets\Vrachimis\Scripts\CameraController.cs" />
      <Compile Include="Assets\Vrachimis\Scripts\ChangeCarbonToOxygen.cs" />
      <Compile Include="Assets\Vrachimis\Scripts\CupFilterScoreIncrement.cs" />
      <Compile Include="Assets\Vrachimis\Scripts\CupMovement.cs" />
+     <Compile Include="Assets\Vrachimis\Scripts\FPS.cs" />
      <Compile Include="Assets\Vrachimis\Scripts\GameManager.cs" />
      <Compile Include="Assets\Vrachimis\Scripts\OxygenGravity.cs" />
      <Compile Include="Assets\Vrachimis\Scripts\ResizeBackground.cs" />

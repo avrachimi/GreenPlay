@@ -9,14 +9,14 @@ public class CupMovement : MonoBehaviour {
 	public Transform exitWaypoint;
 	public int currentWayPoint = 0; 
 	public float speed = 4f;
-	// Maximum turn rate in degrees per second.
 	public float turningRate = 30f;
 	public float arrivalDistance = 0.1f;
 
-	Transform targetWayPoint;
+	public GameManager gameManager;
 
-	// Rotation we should blend towards.
-	private Quaternion _targetRotation = Quaternion.identity;
+	Transform targetWayPoint;
+	bool isStop = false;
+
 	private Rigidbody2D rb2d;
 	private float timer;
 	private float ang = 0f;
@@ -26,8 +26,19 @@ public class CupMovement : MonoBehaviour {
 	private bool stopWaypoints;
 	private bool doesCollide;
 
+
 	// Use this for initialization
 	void Start () {
+
+		GameObject gameManagerObject = GameObject.FindWithTag("GameManager");
+		if (gameManagerObject != null)
+		{
+			gameManager = gameManagerObject.GetComponent <GameManager>();
+		}
+		if (gameManager == null)
+		{
+			Debug.Log ("Cannot find 'GameController' script");
+		}
 
 		for (int x = 1; x <= 8; x++) {
 			wayPointList[x-1] = GameObject.Find("Waypoint " + x).transform;
@@ -143,7 +154,21 @@ public class CupMovement : MonoBehaviour {
 		rb2d.MovePosition(transform.position + direct * (speed * Time.fixedDeltaTime));
 		//transform.Translate(new Vector3(-5,0,0) * Time.deltaTime);
 
-		if (transform.position.x < -4.8f) Destroy(transform.parent.gameObject);
+		if (transform.position.x < -4.8f) {
+			Destroy(transform.parent.gameObject);
+			gameManager.incrementCupsDestroyed();
+			Debug.Log("" + gameManager.cupsDestroyed);
+		}
+
+		if (gameManager.cupsDestroyed >= 6) {
+			gameManager.cupsDestroyed = 0;
+			isStop = true;
+			Debug.Log("A");
+			gameManager.endGame();
+		}
+		else {
+			gameManager.cupsDestroyed = 0;
+		}
 	}
 
 	void incrementSpeed()
@@ -175,8 +200,4 @@ public class CupMovement : MonoBehaviour {
 		doesCollide = false;
 	}*/
 
-	void RotateObject(Vector3 angles)
-	{
-		_targetRotation = Quaternion.Euler(angles);
-	}
 }
