@@ -52,6 +52,9 @@ public class GameManager : MonoBehaviour {
 				Time.timeScale = 0;
 				//should display options menu
 			}
+			else {
+				rb2dCircleDoor.MoveRotation(0f);
+			}
 		}
 		else if (hit == null || hit.collider == null) {
 			rb2dCircleDoor.MoveRotation(0f);
