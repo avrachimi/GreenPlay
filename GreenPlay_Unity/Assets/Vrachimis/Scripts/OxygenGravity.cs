@@ -29,9 +29,6 @@ public class OxygenGravity : MonoBehaviour {
 			spriteRenderer.sprite = carbon;
 			Debug.Log("HI");
 		}
-		else {
-			spriteRenderer.sprite = oxygen;
-		}
 	}
 
 	void FixedUpdate() {
