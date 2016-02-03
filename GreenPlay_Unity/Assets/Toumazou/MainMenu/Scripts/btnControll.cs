@@ -35,11 +35,11 @@ public class btnControll : MonoBehaviour {
 			}
 		else if (gameObject.name == "shop_button(Clone)") {
 			spriteRenderer.sprite = btnShop;
-			transform.localScale = new Vector3 (0.5f/500*Screen.width, 0.5f/500*Screen.height, 0);
+			transform.localScale = new Vector3 (1.02f/500*Screen.width, 0.57f/500*Screen.height, 0);
 		}
 		else if (gameObject.name == "noads_button(Clone)") {
 			spriteRenderer.sprite = btnAds;
-			transform.localScale = new Vector3 (0.5f/500*Screen.width, 0.5f/500*Screen.height, 0);
+			transform.localScale = new Vector3 (1.11f/500*Screen.width, 0.61f/500*Screen.height, 0);
 		}
 
 	}
@@ -54,24 +54,24 @@ public class btnControll : MonoBehaviour {
 			if (hit.collider.name == "play_button(Clone)") {
 				Debug.Log ("kotsiod");
 				spriteRenderer.sprite = btnPlayPressed;
-				transform.localScale = new Vector3 (1.01f*Screen.width, 0.57f/500*Screen.height, 0);
+				transform.localScale = new Vector3 (1.01f*Screen.width/500, 0.57f/500*Screen.height, 0);
 				}
 			else if (hit.collider.name == "shop_button(Clone)") {
 				Debug.Log ("kotsiod");
 				spriteRenderer.sprite = btnShopPressed;
-				transform.localScale = new Vector3 (0.5f/500*Screen.width, 0.5f/500*Screen.height, 0);
+				transform.localScale = new Vector3 (1.02f/500*Screen.width, 0.57f/500*Screen.height, 0);
 			}
 			else if (hit.collider.name == "noads_button(Clone)") {
 				Debug.Log ("kotsiod");
 				spriteRenderer.sprite = btnAdsPressed;
-				transform.localScale = new Vector3 (0.5f/500*Screen.width, 0.5f/500*Screen.height, 0);
+				transform.localScale = new Vector3 (1.11f/500*Screen.width, 0.61f/500*Screen.height, 0);
 			}
 
 		}
 
 
 
-		if (gameObject.name == "play_button(Clone)") {
+		/*if (gameObject.name == "play_button(Clone)") {
 			spriteRenderer.sprite = btnplay;
 			transform.localScale = new Vector3 (Screen.width*playX/500, playY* Screen.height /500, 0);
 		}
@@ -82,6 +82,6 @@ public class btnControll : MonoBehaviour {
 		else if (gameObject.name == "noads_button(Clone)") {
 			spriteRenderer.sprite = btnAds;
 			transform.localScale = new Vector3 (noadsX/500*Screen.width, noadsY/500*Screen.height, 0);
-		}
+		}*/
 	}
 }

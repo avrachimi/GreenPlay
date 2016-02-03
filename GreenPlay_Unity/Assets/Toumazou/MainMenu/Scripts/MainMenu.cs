@@ -26,18 +26,18 @@ public class MainMenu : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		Instantiate (play_button, new Vector3 (-.1f/500*Screen.width,.58f/500*Screen.height , 0), Quaternion.identity);
-		Instantiate (ads_button, new Vector3 (-1.41f/500*Screen.width, -0.58f/500*Screen.height, 0), Quaternion.identity);
-		Instantiate (shop_button, new Vector3 (1.24f/500*Screen.width, -0.9f/500*Screen.height, 0), Quaternion.identity);
-		playTest = GameObject.Find("play_button(Clone)");
+		Instantiate (play_button, new Vector3 (-0.12f/500*Screen.width,0.8f/500*Screen.height , 0), Quaternion.identity);
+		Instantiate (ads_button, new Vector3 (-2.17f/500*Screen.width, -0.7f/500*Screen.height, 0), Quaternion.identity);
+		Instantiate (shop_button, new Vector3 (2.46f/500*Screen.width, -0.59f/500*Screen.height, 0), Quaternion.identity);
+		/*playTest = GameObject.Find("play_button(Clone)");
 		shopTest = GameObject.Find ("shop_button(Clone)");
-		noadsTest = GameObject.Find ("noads_button(Clone)");
+		noadsTest = GameObject.Find ("noads_button(Clone)");*/
 	}
 
 	// Update is called once per frame
 	void Update () {
-		playTest.transform.position = new Vector3 (playX/500*Screen.width, playY/500*Screen.height, 0);
+		/*playTest.transform.position = new Vector3 (playX/500*Screen.width, playY/500*Screen.height, 0);
 		shopTest.transform.position = new Vector3 (shopX/500*Screen.width, shopY/500*Screen.height, 0);
-		noadsTest.transform.position = new Vector3 (noadsX/500*Screen.width, noadsY/500*Screen.height, 0);
+		noadsTest.transform.position = new Vector3 (noadsX/500*Screen.width, noadsY/500*Screen.height, 0);*/
 	}
 }
