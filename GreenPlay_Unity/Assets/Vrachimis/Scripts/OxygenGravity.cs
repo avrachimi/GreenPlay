@@ -18,6 +18,7 @@ public class OxygenGravity : MonoBehaviour {
 	void Start () {
 		rb2d = GetComponent<Rigidbody2D>();
 		spriteRenderer = GetComponent<SpriteRenderer>();
+		gravityObject = GameObject.Find("circleTree");
 	}
 	
 	// Update is called once per frame
@@ -28,6 +29,15 @@ public class OxygenGravity : MonoBehaviour {
 		if ((transform.position.x < -1.5f) && (transform.position.y < 1) && (transform.position.y > -1)) {
 			spriteRenderer.sprite = carbon;
 			Debug.Log("HI");
+		}
+		else if ((transform.position.y < 0) && (transform.position.x > -0.65f) && (transform.position.x < 1.5f)) {
+			Vector3 dir = (gravityObject.transform.position - transform.position).normalized;
+
+			//(speed * Time.fixedDeltaTime) makes the object move by 'speed' units per second, framerate independent
+			rb2d.MovePosition(transform.position + dir * (4f * Time.fixedDeltaTime));
+		}
+		else if (transform.position.y > 15) {
+			//Destroy(gameObject);
 		}
 	}
 

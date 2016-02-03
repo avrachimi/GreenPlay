@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class btnControll : MonoBehaviour {
 
@@ -53,8 +54,10 @@ public class btnControll : MonoBehaviour {
 			//LATER: make sure to check if hitting pause or mute button
 			if (hit.collider.name == "play_button(Clone)") {
 				Debug.Log ("kotsiod");
-				spriteRenderer.sprite = btnPlayPressed;
+				//spriteRenderer.sprite = btnPlayPressed;
+				hit.transform.gameObject.GetComponent<SpriteRenderer>().sprite = btnPlayPressed;
 				transform.localScale = new Vector3 (1.01f*Screen.width/500, 0.57f/500*Screen.height, 0);
+				SceneManager.LoadScene(1);
 				}
 			else if (hit.collider.name == "shop_button(Clone)") {
 				Debug.Log ("kotsiod");
@@ -71,9 +74,9 @@ public class btnControll : MonoBehaviour {
 
 
 
-		/*if (gameObject.name == "play_button(Clone)") {
+		if (gameObject.name == "play_button(Clone)") {
 			spriteRenderer.sprite = btnplay;
-			transform.localScale = new Vector3 (Screen.width*playX/500, playY* Screen.height /500, 0);
+			transform.localScale = new Vector3 (Screen.width*0.74f/500, 0.42f* Screen.height /500, 0);
 		}
 		else if (gameObject.name == "shop_button(Clone)") {
 			spriteRenderer.sprite = btnShop;
@@ -82,6 +85,6 @@ public class btnControll : MonoBehaviour {
 		else if (gameObject.name == "noads_button(Clone)") {
 			spriteRenderer.sprite = btnAds;
 			transform.localScale = new Vector3 (noadsX/500*Screen.width, noadsY/500*Screen.height, 0);
-		}*/
+		}
 	}
 }

@@ -5,6 +5,7 @@ public class GameManager : MonoBehaviour {
 
 	public GUIText scoreText;
 	public GameObject circleDoor;
+	public CameraController cameraController;
 	public GameObject cupObject;
 	public GameObject oxygenSet;
 	public int cupsDestroyed = 0;
@@ -13,14 +14,16 @@ public class GameManager : MonoBehaviour {
 	private int cupCounter = 0;
 	private int oxygenCounter = 0;
 	private Rigidbody2D rb2dCircleDoor;
+	private CircleCollider2D collCircleDoor;
 
 	private CupMovement cupMovement;
 
 	// Use this for initialization
 	void Start () {
 		Application.targetFrameRate = 60;
-
-
+		collCircleDoor = circleDoor.GetComponent<CircleCollider2D>();
+		GameObject cameraControllerObject = GameObject.FindWithTag("MainCamera");
+		cameraController = cameraControllerObject.GetComponent<CameraController>();
 
 		score = 0;
 		updateScore();
@@ -54,6 +57,7 @@ public class GameManager : MonoBehaviour {
 		{
 			if (touch.phase == TouchPhase.Began) {
 				rb2dCircleDoor.MoveRotation(-90f);
+				//collCircleDoor.enabled = false;
 				Vector3 pos = Camera.main.ScreenToWorldPoint (Input.mousePosition);
 				RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero);
 				if (hit != null && hit.collider != null) {
@@ -67,6 +71,7 @@ public class GameManager : MonoBehaviour {
 				}
 			}
 			else if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled) {
+				//collCircleDoor.enabled = true;
 				rb2dCircleDoor.MoveRotation(0f);
 			}
 		}
@@ -111,14 +116,15 @@ public class GameManager : MonoBehaviour {
 
 	public void endGame()
 	{
-		//scoreText.enabled = false;
+		scoreText.enabled = false;
 		scoreText.text = "asdf";
 		Debug.Log("B");
+		cameraController.moveCamera();
 	}
 
-	public void incrementCupsDestroyed() 
+	public void incrementCupsDestroyed(int num) 
 	{
-		cupsDestroyed += 1;
-		Debug.Log("increment");
+		cupsDestroyed = num;
+		Debug.Log("increment" + cupsDestroyed);
 	}
 }

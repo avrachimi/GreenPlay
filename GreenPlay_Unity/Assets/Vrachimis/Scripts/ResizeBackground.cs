@@ -4,6 +4,8 @@ using System.Collections;
 public class ResizeBackground : MonoBehaviour {
 
 	public int location = 1;
+	public float worldScreenHeight;
+	public float worldScreenWidth;
 
 	private Vector3 localScale;
 	// Use this for initialization
@@ -25,8 +27,8 @@ public class ResizeBackground : MonoBehaviour {
 		float width = sr.bounds.size.x;
 		float height = sr.bounds.size.y;
 
-		float worldScreenHeight = Camera.main.orthographicSize * 2.0f;
-		float worldScreenWidth = worldScreenHeight / Screen.height * Screen.width;
+		worldScreenHeight = Camera.main.orthographicSize * 2.0f;
+		worldScreenWidth = worldScreenHeight / Screen.height * Screen.width;
 		localScale = new Vector3(worldScreenWidth / width, worldScreenHeight / height, 0);
 		transform.localScale = localScale;
 

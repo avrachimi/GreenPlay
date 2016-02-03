@@ -25,6 +25,8 @@ public class CupMovement : MonoBehaviour {
 	private float angle;
 	private bool stopWaypoints;
 	private bool doesCollide;
+	private int destroyed = 0;
+	private bool isIncrement = false;
 
 
 	// Use this for initialization
@@ -60,7 +62,7 @@ public class CupMovement : MonoBehaviour {
 		direction = center.transform.position - transform.position;
 		ang = Vector2.Angle(rb2d.transform.position, direction);
 
-		if ((transform.position.y < 0) && (transform.position.x > -1.4f) && (transform.position.x < 1.5f)) //rotate towards the tree in the center
+		if ((transform.position.y < 0) && (transform.position.x > -0.65f) && (transform.position.x < 1.5f)) //rotate towards the tree in the center
 		{
 
 			Vector3 cross = Vector3.Cross(rb2d.transform.position, direction);
@@ -73,6 +75,7 @@ public class CupMovement : MonoBehaviour {
 		} 
 		else if ((transform.position.y > 0) && (transform.position.x < -1.5f) && (doesCollide == false)) {
 			stopWaypoints = true;
+			isIncrement = true;
 		}
 		else {
 			//RotateObject(Vector3.down);
@@ -84,6 +87,22 @@ public class CupMovement : MonoBehaviour {
 		//transform.rotation = Quaternion.RotateTowards(transform.rotation, _targetRotation, turningRate * Time.deltaTime);
 
 		//touchInput();
+		// check if there is a waypoint in the list
+		if(currentWayPoint < this.wayPointList.Length)
+		{
+			if(targetWayPoint == null)
+			{
+				targetWayPoint = wayPointList[currentWayPoint];
+				//Debug.Log("Waypoint was empty. Object: " + gameObject.name);
+			}
+			if (stopWaypoints == false) {
+				walk();
+			}
+			else if (stopWaypoints && isIncrement) {
+				exit();
+				isIncrement = false;
+			}
+		}
 	}
 
 	void touchInput()
@@ -99,7 +118,7 @@ public class CupMovement : MonoBehaviour {
 		}
 	}
 
-	void FixedUpdate()
+	/*void FixedUpdate()
 	{
 		// check if there is a waypoint in the list
 		if(currentWayPoint < this.wayPointList.Length)
@@ -117,7 +136,7 @@ public class CupMovement : MonoBehaviour {
 			}
 		}
 
-	}
+	}*/
 
 
 	void walk()
@@ -152,16 +171,17 @@ public class CupMovement : MonoBehaviour {
 	{
 		Vector3 direct = (exitWaypoint.position - transform.position).normalized;
 		rb2d.MovePosition(transform.position + direct * (speed * Time.fixedDeltaTime));
+		destroyed = 7 - GameObject.FindGameObjectsWithTag("Cup").Length;
 		//transform.Translate(new Vector3(-5,0,0) * Time.deltaTime);
-
-		if (transform.position.x < -4.8f) {
+		if (transform.position.x < -4.8f && destroyed < 6) {
 			Destroy(transform.parent.gameObject);
-			gameManager.incrementCupsDestroyed();
-			Debug.Log("" + gameManager.cupsDestroyed);
+			gameManager.incrementCupsDestroyed(destroyed);
+			//gameManager.endGame();
+			Debug.Log("" + destroyed);
 		}
 
-		if (gameManager.cupsDestroyed >= 6) {
-			gameManager.cupsDestroyed = 0;
+		if (destroyed >= 6) {
+			//gameManager.cupsDestroyed = 0;
 			isStop = true;
 			Debug.Log("A");
 			gameManager.endGame();

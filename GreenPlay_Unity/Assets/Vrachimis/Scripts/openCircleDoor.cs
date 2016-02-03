@@ -4,9 +4,11 @@ using System.Collections;
 public class openCircleDoor : MonoBehaviour {
 
 	private Rigidbody2D rb2d; 
+	private CircleCollider2D clldr;
 	// Use this for initialization
 	void Start () {
 		rb2d = GetComponent<Rigidbody2D>();
+		clldr = GetComponent<CircleCollider2D>();
 		//Input.simulateMouseWithTouches = true;
 	}
 	
@@ -52,10 +54,11 @@ public class openCircleDoor : MonoBehaviour {
 			Debug.Log ("I'm hitting "+hit.collider.name);
 			//LATER: make sure to check if hitting pause or mute button
 			if (hit.collider.name == "open") {
-				
-				rb2d.MoveRotation(-90f);
+				clldr.enabled = false;
+				//rb2d.MoveRotation(-90f);
 			} else {
 				rb2d.MoveRotation(0f);
+				clldr.enabled = true;
 			}
 		}
 		else {
