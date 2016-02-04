@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEditor;
 using System.Collections;
 using UnityEngine.SceneManagement;
 
@@ -19,8 +20,6 @@ public class btnControll : MonoBehaviour {
 	public float shopY;
 	public float noadsX;
 	public float noadsY;
-
-
 
 
 
@@ -47,6 +46,8 @@ public class btnControll : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		 //(Screen.width, Screen.height);
+
 		Vector3 pos = Camera.main.ScreenToWorldPoint (Input.mousePosition);
 		RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero);
 		if (hit != null && hit.collider != null) {
@@ -55,7 +56,7 @@ public class btnControll : MonoBehaviour {
 			if (hit.collider.name == "play_button(Clone)") {
 				Debug.Log ("kotsiod");
 				//spriteRenderer.sprite = btnPlayPressed;
-				hit.transform.gameObject.GetComponent<SpriteRenderer>().sprite = btnPlayPressed;
+				//hit.transform.gameObject.GetComponent<SpriteRenderer>().sprite = btnPlayPressed;
 				transform.localScale = new Vector3 (1.01f*Screen.width/500, 0.57f/500*Screen.height, 0);
 				SceneManager.LoadScene(1);
 				}
@@ -73,7 +74,7 @@ public class btnControll : MonoBehaviour {
 		}
 
 
-
+		/*
 		if (gameObject.name == "play_button(Clone)") {
 			spriteRenderer.sprite = btnplay;
 			transform.localScale = new Vector3 (Screen.width*0.74f/500, 0.42f* Screen.height /500, 0);
@@ -85,6 +86,6 @@ public class btnControll : MonoBehaviour {
 		else if (gameObject.name == "noads_button(Clone)") {
 			spriteRenderer.sprite = btnAds;
 			transform.localScale = new Vector3 (noadsX/500*Screen.width, noadsY/500*Screen.height, 0);
-		}
+		}*/
 	}
 }
