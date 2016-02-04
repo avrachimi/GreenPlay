@@ -57,7 +57,7 @@ public class btnControll : MonoBehaviour {
 				//spriteRenderer.sprite = btnPlayPressed;
 				hit.transform.gameObject.GetComponent<SpriteRenderer>().sprite = btnPlayPressed;
 				transform.localScale = new Vector3 (playX *(Screen.width/9f),playY*(Screen.height/16f), 0);
-				//SceneManager.LoadScene(1);
+				SceneManager.LoadScene(1);
 				}
 			else if (hit.collider.name == "shop_button(Clone)") {
 				Debug.Log ("kotsiod");
