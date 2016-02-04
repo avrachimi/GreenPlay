@@ -5,6 +5,7 @@ public class GameManager : MonoBehaviour {
 
 	public GUIText scoreText;
 	public GameObject circleDoor;
+	public GameObject circleDoor2;
 	public CameraController cameraController;
 	public GameObject cupObject;
 	public GameObject oxygenSet;
@@ -14,6 +15,7 @@ public class GameManager : MonoBehaviour {
 	private int cupCounter = 0;
 	private int oxygenCounter = 0;
 	private Rigidbody2D rb2dCircleDoor;
+	private Rigidbody2D rb2dCircleDoor2;
 	private CircleCollider2D collCircleDoor;
 
 	private CupMovement cupMovement;
@@ -25,9 +27,15 @@ public class GameManager : MonoBehaviour {
 		GameObject cameraControllerObject = GameObject.FindWithTag("MainCamera");
 		cameraController = cameraControllerObject.GetComponent<CameraController>();
 
+		scoreText.fontSize = Mathf.Min(Screen.height,Screen.width)/3;
+		scoreText.pixelOffset = new Vector2(0,Screen.height * 0.13f);
+		scoreText.anchor = TextAnchor.UpperCenter;
+		scoreText.alignment = TextAlignment.Center;
 		score = 0;
+
 		updateScore();
 		rb2dCircleDoor = circleDoor.GetComponent<Rigidbody2D>();
+		rb2dCircleDoor2 = circleDoor2.GetComponent<Rigidbody2D>();
 		InvokeRepeating("spawnCup",1f,1.461f);
 		InvokeRepeating("spawnOxygen",0f,0.2f);
 	}
@@ -48,6 +56,7 @@ public class GameManager : MonoBehaviour {
 	void updateScore()
 	{
 		scoreText.text = "" + score;
+
 	}
 
 	void touchInput()
@@ -57,6 +66,8 @@ public class GameManager : MonoBehaviour {
 		{
 			if (touch.phase == TouchPhase.Began) {
 				rb2dCircleDoor.MoveRotation(-90f);
+				rb2dCircleDoor2.MoveRotation(90f);
+				//circleDoor.transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0,0,-90), 1000 * Time.deltaTime);
 				//collCircleDoor.enabled = false;
 				Vector3 pos = Camera.main.ScreenToWorldPoint (Input.mousePosition);
 				RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero);
@@ -73,6 +84,8 @@ public class GameManager : MonoBehaviour {
 			else if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled) {
 				//collCircleDoor.enabled = true;
 				rb2dCircleDoor.MoveRotation(0f);
+				rb2dCircleDoor2.MoveRotation(0f);
+				//circleDoor.transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0,0,0), 1000 * Time.deltaTime);
 			}
 		}
 		/*
@@ -111,7 +124,7 @@ public class GameManager : MonoBehaviour {
 		Instantiate(oxygenSet, new Vector3(-0.5f,-0.5f,0), Quaternion.identity);
 		Instantiate(oxygenSet, new Vector3(0,-0.5f,0), Quaternion.identity);
 		oxygenCounter += 6;
-		if(oxygenCounter >= 100) CancelInvoke("spawnOxygen");
+		if(oxygenCounter >= 50) CancelInvoke("spawnOxygen");
 	}
 
 	public void endGame()
