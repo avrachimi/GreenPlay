@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 
 Project("{CD66F3EE-4BA7-F9DA-34E5-3E84AD180155}") = "GreenPlay_Unity", "Assembly-CSharp.csproj", "{AA474A08-01F6-342F-281A-B5D8B32E1696}"
 EndProject
+Project("{CD66F3EE-4BA7-F9DA-34E5-3E84AD180155}") = "GreenPlay_Unity", "Assembly-CSharp-Editor.csproj", "{F8247597-3CC7-0049-3EA5-C302BB9F0999}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{AA474A08-01F6-342F-281A-B5D8B32E1696}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA474A08-01F6-342F-281A-B5D8B32E1696}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AA474A08-01F6-342F-281A-B5D8B32E1696}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8247597-3CC7-0049-3EA5-C302BB9F0999}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8247597-3CC7-0049-3EA5-C302BB9F0999}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8247597-3CC7-0049-3EA5-C302BB9F0999}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8247597-3CC7-0049-3EA5-C302BB9F0999}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
