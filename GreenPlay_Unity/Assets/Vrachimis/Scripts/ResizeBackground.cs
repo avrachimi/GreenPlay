@@ -29,6 +29,7 @@ public class ResizeBackground : MonoBehaviour {
 
 		worldScreenHeight = Camera.main.orthographicSize * 2.0f;
 		worldScreenWidth = worldScreenHeight / Screen.height * Screen.width;
+		Debug.Log(worldScreenWidth);
 		localScale = new Vector3(worldScreenWidth / width, worldScreenHeight / height, 0);
 		transform.localScale = localScale;
 

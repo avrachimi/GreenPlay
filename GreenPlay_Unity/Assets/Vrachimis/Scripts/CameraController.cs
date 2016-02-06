@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using ChartboostSDK;
 
 public class CameraController : MonoBehaviour {
 
@@ -11,8 +12,13 @@ public class CameraController : MonoBehaviour {
 	private Vector3 velocity = Vector3.zero;
 
 	private Vector3 startPos;
+	private bool shownAd = false;
+	private bool closeScene = false;
 	// Use this for initialization
 	void Start () {
+		
+
+		shownAd = true; //ONLY because I want applovin to show first and if it fails chartboost to show second
 		GameObject resizeBackgroundObject = GameObject.Find("Background");
 		if (resizeBackgroundObject != null)
 		{
@@ -22,13 +28,19 @@ public class CameraController : MonoBehaviour {
 		{
 			Debug.Log ("Cannot find 'GameController' script");
 		}
+		//DontDestroyOnLoad(transform.gameObject);
+
 
 		startPos = transform.position;
 	}
+
+
 	
 	// Update is called once per frame
 	void Update () {
 		
+
+
 	}
 
 	public void moveCamera() 
@@ -36,8 +48,17 @@ public class CameraController : MonoBehaviour {
 		Vector3 targetX = new Vector3(2 * resizeBackground.worldScreenWidth,0,-10);
 		//transform.position = Vector3.Slerp(transform.position, targetX, Time.deltaTime);
 		transform.position = Vector3.SmoothDamp(transform.position, targetX, ref velocity, time /10);
-		if (transform.position.x < targetX.x + 0.02f && transform.position.x > targetX.x - 0.02f) {
-			SceneManager.LoadScene("GameOverScene");
+		/*if (transform.position.x < targetX.x + 0.02f && transform.position.x > targetX.x - 0.02f && closeScene) {
+			//Chartboost.showInterstitial(CBLocation.HomeScreen);
+			SceneManager.LoadScene(2);
 		}
+
+		if (transform.position.x < targetX.x + 0.02f && transform.position.x > targetX.x - 0.09f && shownAd == false) {
+			AppLovin.ShowInterstitial();
+			//Chartboost.showInterstitial(CBLocation.Default);
+			shownAd = true;
+		}*/
 	}
+
+
 }

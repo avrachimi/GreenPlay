@@ -45,6 +45,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\AppLovin\AppLovin.cs" />
+     <Compile Include="Assets\AppLovin\AppLovinEvents.cs" />
      <Compile Include="Assets\Chartboost\Examples\ChartboostExample\ChartboostExample.cs" />
      <Compile Include="Assets\Chartboost\Scripts\CBExternal.cs" />
      <Compile Include="Assets\Chartboost\Scripts\CBInPlay.cs" />
@@ -64,6 +66,7 @@
      <Compile Include="Assets\Vrachimis\Scripts\GameOverButtons.cs" />
      <Compile Include="Assets\Vrachimis\Scripts\OxygenGravity.cs" />
      <Compile Include="Assets\Vrachimis\Scripts\ResizeBackground.cs" />
+     <Compile Include="Assets\Vrachimis\Scripts\ShowAds.cs" />
      <Compile Include="Assets\Vrachimis\Scripts\openCircleDoor.cs" />
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\values-pt\base_strings.xml" />
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\values-eu-rES\location_strings.xml" />
@@ -227,6 +230,7 @@
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\values-lv\wallet_strings.xml" />
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\values-ur-rPK\common_strings.xml" />
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\values-my-rMM\common_strings.xml" />
+     <None Include="Assets\AppLovin\AppLovin Readme.txt" />
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\values-my-rMM\location_strings.xml" />
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\values-ka-rGE\common_strings.xml" />
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\values-es-rUS\location_strings.xml" />
@@ -283,6 +287,7 @@
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\drawable\common_plus_signin_btn_icon_light.xml" />
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\values-tr\location_strings.xml" />
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\values-sl\base_strings.xml" />
+     <None Include="Assets\Plugins\Android\AndroidManifest.xml" />
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\values-fa\common_strings.xml" />
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\values-fr\location_strings.xml" />
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\values-ru\common_strings.xml" />
@@ -334,7 +339,6 @@
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\values-mk-rMK\location_strings.xml" />
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\values-es\location_strings.xml" />
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\values-gu-rIN\location_strings.xml" />
-     <None Include="Assets\Plugins\Android\AndroidManifest.xml" />
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\values-sk\wallet_strings.xml" />
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\values-th\base_strings.xml" />
      <None Include="Assets\Plugins\Android\google-play-services_lib\res\values-mk-rMK\common_strings.xml" />

@@ -27,6 +27,8 @@ public class GameOverButtons : MonoBehaviour {
 	public int score = 938;
 	// Use this for initialization
 	void Start () {
+		score = PlayerPrefs.GetInt("Score");
+		highScore = PlayerPrefs.GetInt("HighScore");
 		highScoreStyle.fontSize = Mathf.Min(Screen.height,Screen.width)/10;
 		scoreStyle.fontSize = Mathf.Min(Screen.height,Screen.width)/10;
 	}

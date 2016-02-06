@@ -11,7 +11,9 @@ public class GameManager : MonoBehaviour {
 	public GameObject oxygenSet;
 	public int cupsDestroyed = 0;
 
-	private int score;
+	private int score = 0;
+	private int highScore;
+
 	private int cupCounter = 0;
 	private int oxygenCounter = 0;
 	private Rigidbody2D rb2dCircleDoor;
@@ -22,6 +24,11 @@ public class GameManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		Debug.Log("GameManager RUNS!");
+		/*AppLovin.SetSdkKey("fyTagFDisKNQOwVukdLCv5_iCinuTdf8aDiFTxzKFKleEFWztt9nz9T9sE1KthSRwAhN5ehLzR_CgW9XNIIKSm");
+		AppLovin.InitializeSdk ();
+		AppLovin.PreloadInterstitial();*/
+
 		Application.targetFrameRate = 60;
 		collCircleDoor = circleDoor.GetComponent<CircleCollider2D>();
 		GameObject cameraControllerObject = GameObject.FindWithTag("MainCamera");
@@ -36,14 +43,21 @@ public class GameManager : MonoBehaviour {
 		updateScore();
 		rb2dCircleDoor = circleDoor.GetComponent<Rigidbody2D>();
 		rb2dCircleDoor2 = circleDoor2.GetComponent<Rigidbody2D>();
-		InvokeRepeating("spawnCup",1f,1.461f);
+		InvokeRepeating("spawnCup",1f,2.5f); //2.922f
 		InvokeRepeating("spawnOxygen",0f,0.2f);
+
+		highScore = PlayerPrefs.GetInt("HighScore");
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		touchInput();
 
+		if (score > highScore) {
+			highScore = score;
+			PlayerPrefs.SetInt("HighScore", highScore);
+
+		}
 
 	}
 
@@ -132,6 +146,8 @@ public class GameManager : MonoBehaviour {
 		scoreText.enabled = false;
 		scoreText.text = "asdf";
 		Debug.Log("B");
+		PlayerPrefs.SetInt("Score", score);
+		PlayerPrefs.Save();
 		cameraController.moveCamera();
 	}
 
@@ -139,5 +155,16 @@ public class GameManager : MonoBehaviour {
 	{
 		cupsDestroyed = num;
 		Debug.Log("increment" + cupsDestroyed);
+	}
+
+	void OnApplicationPause() 
+	{
+		PlayerPrefs.Save();
+		Time.timeScale = 0;
+	}
+
+	void OnApplicationFocus()
+	{
+		Time.timeScale = 1;
 	}
 }
