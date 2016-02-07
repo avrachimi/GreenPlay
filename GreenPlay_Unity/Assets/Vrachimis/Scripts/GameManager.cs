@@ -11,6 +11,11 @@ public class GameManager : MonoBehaviour {
 	public GameObject oxygenSet;
 	public int cupsDestroyed = 0;
 
+	private int score1Size = 3;
+	private int score2Size = 3;
+	private int score3Size = 4;
+	private int score4Size = 4;
+
 	private int score = 0;
 	private int highScore;
 
@@ -24,6 +29,12 @@ public class GameManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+
+		score1Size = 3;
+		score2Size = 3;
+		score3Size = 4;
+		score4Size = 4;
+
 		Debug.Log("GameManager RUNS!");
 		/*AppLovin.SetSdkKey("fyTagFDisKNQOwVukdLCv5_iCinuTdf8aDiFTxzKFKleEFWztt9nz9T9sE1KthSRwAhN5ehLzR_CgW9XNIIKSm");
 		AppLovin.InitializeSdk ();
@@ -51,6 +62,13 @@ public class GameManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+		if (score.ToString().Length == 1) scoreText.fontSize = Mathf.Min(Screen.height,Screen.width)/score1Size;
+		else if (score.ToString().Length == 2) scoreText.fontSize = Mathf.Min(Screen.height,Screen.width)/score2Size;
+		else if (score.ToString().Length == 3) scoreText.fontSize = Mathf.Min(Screen.height,Screen.width)/score3Size;
+		else if (score.ToString().Length == 4) scoreText.fontSize = Mathf.Min(Screen.height,Screen.width)/score4Size;
+
+		updateScore();
 		touchInput();
 
 		if (score > highScore) {
