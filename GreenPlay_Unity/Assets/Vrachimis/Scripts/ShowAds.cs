@@ -8,10 +8,14 @@ public class ShowAds : MonoBehaviour {
 	public GameObject cameraPos ;
 	public GUIStyle style;
 
+	public GameManager gameManager;
+
 	private bool closeScene = false;
 	private bool shownAppLovin = false;
 	private bool shownAd = false;
 	private bool failedToLoadAppLovin = true;
+	private bool failedToLoadInterstitial = true;
+	private bool failedToLoadMoreApps = true;
 	private Vector3 targetX;
 	private int randomNum = 0;
 	private string debg = "none";
@@ -29,6 +33,17 @@ public class ShowAds : MonoBehaviour {
 		{
 			Debug.Log ("Cannot find 'GameController' script");
 		}
+
+		GameObject gameManagerObject = GameObject.FindWithTag("GameManager");
+		if (gameManagerObject != null)
+		{
+			gameManager = gameManagerObject.GetComponent <GameManager>();
+		}
+		if (gameManager == null)
+		{
+			Debug.Log ("Cannot find 'GameController' script");
+		}
+
 		failedToLoadAppLovin = true;
 		AppLovin.SetUnityAdListener("AppLovin Object");
 		AppLovin.PreloadInterstitial();
@@ -74,6 +89,7 @@ public class ShowAds : MonoBehaviour {
 			Debug.Log("Applovin");
 			debg = "app lovin";
 			AppLovin.ShowInterstitial();
+			//shownAppLovin = false;
 			shownAd = true;
 			//shownAppLovin = true;
 		}
@@ -81,13 +97,17 @@ public class ShowAds : MonoBehaviour {
 			//AppLovin.ShowInterstitial();
 			debg = "chartboost";
 			Debug.Log("Chartboost");
-			Chartboost.showInterstitial(CBLocation.Default);
-			/*if (randomNum <= 4) {
+			if (randomNum <= 4 && failedToLoadInterstitial == false) {
 				Chartboost.showInterstitial(CBLocation.Default);
 			}
-			else {
+			else if (randomNum > 4 && failedToLoadMoreApps == false) {
 				Chartboost.showMoreApps(CBLocation.GameOver);
-			}*/
+			}
+			else {
+				if (!failedToLoadInterstitial) Chartboost.showInterstitial(CBLocation.Default);
+				else if (!failedToLoadMoreApps) Chartboost.showMoreApps(CBLocation.GameOver);
+				else closeScene = true;
+			}
 			shownAppLovin = true;
 			//shownAd = true;
 		}
@@ -97,10 +117,12 @@ public class ShowAds : MonoBehaviour {
 	{
 		if (!Chartboost.hasInterstitial(CBLocation.Default)) {
 			//Chartboost.showInterstitial(CBLocation.Default);
+			failedToLoadInterstitial = false;
 			Chartboost.cacheInterstitial(CBLocation.Default);
 
 		}
 		if (!Chartboost.hasMoreApps(CBLocation.GameOver)) {
+			failedToLoadMoreApps = false;
 			Chartboost.cacheMoreApps(CBLocation.GameOver);
 		}
 
@@ -115,8 +137,8 @@ public class ShowAds : MonoBehaviour {
 		if (ev.Contains("REWARDAPPROVEDINFO"))
 		{
 			// Split the string into its three components.
-			char[] delimiter = { '|' };
-			string[] split = ev.Split(delimiter);
+			//char[] delimiter = { '|' };
+			//string[] split = ev.Split(delimiter);
 			// Pull out and parse the amount of virtual currency.
 			//double amount = double.Parse(split[1]);
 			// Pull out the name of the virtual currency
@@ -159,11 +181,14 @@ public class ShowAds : MonoBehaviour {
 		}
 		if (ev.Contains("CLICKED")) {
 			//save the score and high score
+			gameManager.save();
 		}
 	}
 
 	void OnEnable() 
 	{
+		Chartboost.didCacheMoreApps += didCacheMoreApps;
+		Chartboost.didCacheInterstitial += didCacheInterstitial;
 		Chartboost.didFailToLoadMoreApps += didFailToLoadMoreApps;
 		Chartboost.didDismissMoreApps += didDismissMoreApps;
 		Chartboost.didCloseMoreApps += didCloseMoreApps;
@@ -177,6 +202,8 @@ public class ShowAds : MonoBehaviour {
 
 	void OnDisable()
 	{
+		Chartboost.didCacheMoreApps -= didCacheMoreApps;
+		Chartboost.didCacheInterstitial -= didCacheInterstitial;
 		Chartboost.didFailToLoadMoreApps -= didFailToLoadMoreApps;
 		Chartboost.didDismissMoreApps -= didDismissMoreApps;
 		Chartboost.didCloseMoreApps -= didCloseMoreApps;
@@ -193,15 +220,20 @@ public class ShowAds : MonoBehaviour {
 		debg = "CB Init";
 	}
 
+	void didCacheInterstitial(CBLocation location) {
+		failedToLoadInterstitial = false;
+	}
+
 	void didFailToLoadInterstitial(CBLocation location, CBImpressionError error) {
 		AddLog(string.Format("didFailToLoadInterstitial: {0} at location {1}", error, location));
 		debg = "failed chartboost";
-		closeScene = true;
+		failedToLoadInterstitial = true;
+		//closeScene = true;
 	}
 
 	void didDismissInterstitial(CBLocation location) {
 		AddLog("didDismissInterstitial: " + location);
-		debg = "failed chartboost";
+		debg = "dismiss chartboost";
 		closeScene = true;
 	}
 
@@ -213,15 +245,17 @@ public class ShowAds : MonoBehaviour {
 
 	void didClickMoreApps(CBLocation location) {
 		//save data
+		gameManager.save();
 	}
 
 	void didClickInterstitial(CBLocation location) {
 		//save data
+		gameManager.save();
 	}
 
 	// Called after a MoreApps page has been dismissed.
 	void didDismissMoreApps(CBLocation location) {
-		
+		closeScene = true;
 	}
 
 	// Called after a MoreApps page has been closed.
@@ -231,7 +265,12 @@ public class ShowAds : MonoBehaviour {
 	// Called after a MoreApps page attempted to load from the Chartboost API
 	// servers but failed.
 	void didFailToLoadMoreApps(CBLocation location, CBImpressionError error) {
-		
+		failedToLoadMoreApps = true;
+		shownAppLovin = true;
+	}
+
+	void didCacheMoreApps(CBLocation location) {
+		failedToLoadMoreApps = false;
 	}
 
 	void AddLog(string text)

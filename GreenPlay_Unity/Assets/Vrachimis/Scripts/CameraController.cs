@@ -11,14 +11,11 @@ public class CameraController : MonoBehaviour {
 
 	private Vector3 velocity = Vector3.zero;
 
-	private Vector3 startPos;
-	private bool shownAd = false;
-	private bool closeScene = false;
 	// Use this for initialization
 	void Start () {
 		
 
-		shownAd = true; //ONLY because I want applovin to show first and if it fails chartboost to show second
+
 		GameObject resizeBackgroundObject = GameObject.Find("Background");
 		if (resizeBackgroundObject != null)
 		{
@@ -30,8 +27,6 @@ public class CameraController : MonoBehaviour {
 		}
 		//DontDestroyOnLoad(transform.gameObject);
 
-
-		startPos = transform.position;
 	}
 
 

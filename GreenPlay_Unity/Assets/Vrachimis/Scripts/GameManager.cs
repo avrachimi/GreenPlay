@@ -23,7 +23,6 @@ public class GameManager : MonoBehaviour {
 	private int oxygenCounter = 0;
 	private Rigidbody2D rb2dCircleDoor;
 	private Rigidbody2D rb2dCircleDoor2;
-	private CircleCollider2D collCircleDoor;
 
 	private CupMovement cupMovement;
 
@@ -36,12 +35,8 @@ public class GameManager : MonoBehaviour {
 		score4Size = 4;
 
 		Debug.Log("GameManager RUNS!");
-		/*AppLovin.SetSdkKey("fyTagFDisKNQOwVukdLCv5_iCinuTdf8aDiFTxzKFKleEFWztt9nz9T9sE1KthSRwAhN5ehLzR_CgW9XNIIKSm");
-		AppLovin.InitializeSdk ();
-		AppLovin.PreloadInterstitial();*/
 
 		Application.targetFrameRate = 60;
-		collCircleDoor = circleDoor.GetComponent<CircleCollider2D>();
 		GameObject cameraControllerObject = GameObject.FindWithTag("MainCamera");
 		cameraController = cameraControllerObject.GetComponent<CameraController>();
 
@@ -81,7 +76,8 @@ public class GameManager : MonoBehaviour {
 
 	public void incrementScore(int amount)
 	{
-		score += amount;
+		score += amount; //changed it for testing new raycast
+		//score = amount;
 		updateScore();
 	}
 
@@ -146,8 +142,7 @@ public class GameManager : MonoBehaviour {
 		scoreText.enabled = false;
 		scoreText.text = "asdf";
 		Debug.Log("B");
-		PlayerPrefs.SetInt("Score", score);
-		PlayerPrefs.Save();
+		save();
 		cameraController.moveCamera();
 	}
 
@@ -159,12 +154,19 @@ public class GameManager : MonoBehaviour {
 
 	void OnApplicationPause() 
 	{
-		PlayerPrefs.Save();
+		save();
 		Time.timeScale = 0;
 	}
 
 	void OnApplicationFocus()
 	{
 		Time.timeScale = 1;
+	}
+
+	public void save()
+	{
+		PlayerPrefs.SetInt("HighScore", highScore);
+		PlayerPrefs.SetInt("Score", score);
+		PlayerPrefs.Save();
 	}
 }
