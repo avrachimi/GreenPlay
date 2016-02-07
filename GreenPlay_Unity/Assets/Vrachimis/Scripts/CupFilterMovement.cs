@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CupMovement : MonoBehaviour {
+public class CupFilterMovement : MonoBehaviour {
 
 
 	public GameObject center;
@@ -32,16 +32,6 @@ public class CupMovement : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		GameObject gameManagerObject = GameObject.FindWithTag("GameManager");
-		if (gameManagerObject != null)
-		{
-			gameManager = gameManagerObject.GetComponent <GameManager>();
-		}
-		if (gameManager == null)
-		{
-			Debug.Log ("Cannot find 'GameController' script");
-		}
-
 		for (int x = 1; x <= 8; x++) {
 			wayPointList[x-1] = GameObject.Find("Waypoint " + x).transform;
 		}
@@ -52,16 +42,10 @@ public class CupMovement : MonoBehaviour {
 		doesCollide = false;
 		rb2d  = GetComponent<Rigidbody2D>();
 		//invokeRepeating
-		if (gameManager.cupCounter == 1) InvokeRepeating("incrementSpeed",0,15);
-		else if (gameManager.cupCounter == 2) InvokeRepeating("incrementSpeed",0,15f - 2.045f);
-		else if (gameManager.cupCounter == 3) InvokeRepeating("incrementSpeed",0,15f - 2*(2.045f));
-		else if (gameManager.cupCounter == 4) InvokeRepeating("incrementSpeed",0,15f - 3*(2.045f));
-		else if (gameManager.cupCounter == 5) InvokeRepeating("incrementSpeed",0,15f - 4*(2.045f));
-		else if (gameManager.cupCounter == 6) InvokeRepeating("incrementSpeed",0,15f - 5*(2.045f));
-		else if (gameManager.cupCounter == 7) InvokeRepeating("incrementSpeed",0,15f - 6*(2.045f));
-	
+		InvokeRepeating("incrementSpeed",20,15);
+
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 
@@ -76,10 +60,9 @@ public class CupMovement : MonoBehaviour {
 			if (cross.z > 0) ang = 360 - ang;
 			//rb2d.MoveRotation(ang);
 			transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0,0,ang), 1000 * Time.deltaTime);
-			doesCollide = false;
 
 		} 
-		else if ((transform.position.y > 0) && (transform.position.x < -1.5f) && (doesCollide == false)) {
+		else if ((transform.position.y > 0) && (transform.position.x < -1.5f)) {
 			stopWaypoints = true;
 			isIncrement = true;
 		}
@@ -111,19 +94,6 @@ public class CupMovement : MonoBehaviour {
 		}
 	}
 
-	void touchInput()
-	{
-		Vector3 pos = Camera.main.ScreenToWorldPoint (Input.mousePosition);
-		RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero);
-		if (hit != null && hit.collider != null) {
-			Debug.Log ("I'm hitting "+hit.collider.name);
-			//LATER: make sure to check if hitting pause or mute button
-			if (hit.collider.name == "restart") {
-				exit();
-			}
-		}
-	}
-
 	void walk()
 	{
 		//If we're close to target, or overshot it, get next waypoint;
@@ -146,7 +116,7 @@ public class CupMovement : MonoBehaviour {
 		//Get direction to the waypoint.
 		//Normalize so it doesn't change with distance.
 		Vector3 dir = (targetWayPoint.position - transform.position).normalized;
-	
+
 		//(speed * Time.fixedDeltaTime) makes the object move by 'speed' units per second, framerate independent
 		rb2d.MovePosition(transform.position + dir * (speed * Time.fixedDeltaTime));
 
@@ -160,19 +130,6 @@ public class CupMovement : MonoBehaviour {
 		//transform.Translate(new Vector3(-5,0,0) * Time.deltaTime);
 		if (transform.position.x < -4.8f && destroyed < 6) {
 			Destroy(transform.parent.gameObject);
-			gameManager.incrementCupsDestroyed(destroyed);
-			//gameManager.endGame();
-			Debug.Log("" + destroyed);
-		}
-
-		if (destroyed >= 6) {
-			//gameManager.cupsDestroyed = 0;
-			isStop = true;
-			Debug.Log("A");
-			gameManager.endGame();
-		}
-		else {
-			gameManager.cupsDestroyed = 0;
 		}
 	}
 
@@ -180,30 +137,4 @@ public class CupMovement : MonoBehaviour {
 	{
 		speed += 0.1f;
 	}
-
-
-	//make atoms childs so that they stay together
-	/*void OnCollisionEnter2D(Collision2D coll)
-	{
-		if (coll.collider.gameObject.tag == "atom") {
-			
-			doesCollide = true;
-		}
-	}*/
-
-	void OnTriggerEnter2D(Collider2D coll)
-	{
-		if (coll.gameObject.tag == "atom") {
-			
-			doesCollide = true;
-			gameManager.incrementScore(1);
-			Debug.Log("TRIGGEEERRRRR");
-		}
-	}
-
-	/*void OnCollisionExit2D(Collision2D coll)
-	{
-		doesCollide = false;
-	}*/
-
 }

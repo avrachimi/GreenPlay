@@ -143,7 +143,7 @@ public class ShowAds : MonoBehaviour {
 
 	void didFailToLoadInterstitial(CBLocation location, CBImpressionError error) {
 		AddLog(string.Format("didFailToLoadInterstitial: {0} at location {1}", error, location));
-		//closeScene = true;
+		closeScene = true;
 	}
 
 	void didDismissInterstitial(CBLocation location) {

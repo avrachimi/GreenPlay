@@ -58,6 +58,7 @@
      <Compile Include="Assets\Toumazou\MainMenu\Scripts\btnControll.cs" />
      <Compile Include="Assets\Vrachimis\Scripts\CameraController.cs" />
      <Compile Include="Assets\Vrachimis\Scripts\ChangeCarbonToOxygen.cs" />
+     <Compile Include="Assets\Vrachimis\Scripts\CupFilterMovement.cs" />
      <Compile Include="Assets\Vrachimis\Scripts\CupFilterScoreIncrement.cs" />
      <Compile Include="Assets\Vrachimis\Scripts\CupMovement.cs" />
      <Compile Include="Assets\Vrachimis\Scripts\DontGoThroughThings.cs" />

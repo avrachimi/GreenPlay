@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour {
 	private int score = 0;
 	private int highScore;
 
-	private int cupCounter = 0;
+	public int cupCounter = 0;
 	private int oxygenCounter = 0;
 	private Rigidbody2D rb2dCircleDoor;
 	private Rigidbody2D rb2dCircleDoor2;
@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviour {
 		updateScore();
 		rb2dCircleDoor = circleDoor.GetComponent<Rigidbody2D>();
 		rb2dCircleDoor2 = circleDoor2.GetComponent<Rigidbody2D>();
-		InvokeRepeating("spawnCup",1f,2.5f); //2.922f
+		InvokeRepeating("spawnCup",0f,2.045f); //2.922f
 		InvokeRepeating("spawnOxygen",0f,0.2f);
 
 		highScore = PlayerPrefs.GetInt("HighScore");
@@ -102,24 +102,6 @@ public class GameManager : MonoBehaviour {
 				//circleDoor.transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0,0,0), 1000 * Time.deltaTime);
 			}
 		}
-		/*
-		Vector3 pos = Camera.main.ScreenToWorldPoint (Input.mousePosition);
-		RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero);
-		if (hit != null && hit.collider != null) {
-			Debug.Log ("I'm hitting "+hit.collider.name);
-			//LATER: make sure to check if hitting pause or mute button
-			if (hit.collider.name == "pause"){
-				Time.timeScale = 0;
-				//should display options menu
-			}
-			else {
-				//rb2dCircleDoor.MoveRotation(0f);
-			}
-		}
-		else if (hit == null || hit.collider == null) {
-			//rb2dCircleDoor.MoveRotation(0f);
-			Time.timeScale = 1;
-		}*/
 	}
 
 	void spawnCup()
