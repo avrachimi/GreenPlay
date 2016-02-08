@@ -73,14 +73,14 @@ public class CupMovement : MonoBehaviour {
 		direction = center.transform.position - transform.position;
 		ang = Vector2.Angle(rb2d.transform.position, direction);
 
-		if ((transform.position.y < 0) && (transform.position.x > -0.65f) && (transform.position.x < 1.5f)) //rotate towards the tree in the center
+		if ((transform.position.y < 0) && (transform.position.x > -0.55f) && (transform.position.x < 1.5f)) //rotate towards the tree in the center
 		{
 
 			Vector3 cross = Vector3.Cross(rb2d.transform.position, direction);
 
 			if (cross.z > 0) ang = 360 - ang;
 			//rb2d.MoveRotation(ang);
-			transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0,0,ang), 1000 * Time.deltaTime); //LAG CHANCE
+			transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0,0,ang), 500 * Time.deltaTime); //LAG CHANCE
 			doesCollide = false;
 
 		} 
@@ -113,7 +113,7 @@ public class CupMovement : MonoBehaviour {
 		}
 	}
 
-	void FixedUpdate() {
+	/*void FixedUpdate() {
 		int count = 0;
 		bool inIt = false;
 		//RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.up, 0.4f);
@@ -143,14 +143,14 @@ public class CupMovement : MonoBehaviour {
 		if (hit.collider == null) {
 			atoms = new GameObject[20];
 		}
-	}
+	}*/
 
 	void touchInput()
 	{
 		Vector3 pos = Camera.main.ScreenToWorldPoint (Input.mousePosition);
 		RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero);
 		if (hit != null && hit.collider != null) {
-			Debug.Log ("I'm hitting "+hit.collider.name);
+			//Debug.Log ("I'm hitting "+hit.collider.name);
 			//LATER: make sure to check if hitting pause or mute button
 			if (hit.collider.name == "restart") {
 				exit();
@@ -196,12 +196,12 @@ public class CupMovement : MonoBehaviour {
 			Destroy(transform.parent.gameObject);
 			gameManager.incrementCupsDestroyed(destroyed);
 			//gameManager.endGame();
-			Debug.Log("" + destroyed);
+			//Debug.Log("" + destroyed);
 		}
 
 		if (destroyed >= 6) {
 			//gameManager.cupsDestroyed = 0;
-			Debug.Log("A");
+			//Debug.Log("A");
 			gameManager.endGame();
 		}
 		else {
@@ -212,20 +212,20 @@ public class CupMovement : MonoBehaviour {
 	void incrementSpeed()
 	{
 		speed += 0.1f;
-		Debug.Log(gameObject.name + ": " + speed);
+		//Debug.Log(gameObject.name + ": " + speed);
 	}
 
 
 
-	/*void OnTriggerEnter2D(Collider2D coll) //LAG CHANCE
+	void OnTriggerEnter2D(Collider2D coll) //LAG CHANCE
 	{
 		if (coll.gameObject.tag == "atom") {
 			
 			doesCollide = true;
 			gameManager.incrementScore(1);
-			Debug.Log("TRIGGEEERRRRR");
+			//Debug.Log("TRIGGEEERRRRR");
 		}
-	}*/
+	}
 
 
 }

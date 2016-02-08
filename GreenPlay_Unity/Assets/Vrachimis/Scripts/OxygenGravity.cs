@@ -28,11 +28,11 @@ public class OxygenGravity : MonoBehaviour {
 		Vector3 dir = (gravityObject.transform.position - transform.position).normalized;
 
 		if ((transform.position.x < -1.5f) && (transform.position.y < 1) && (transform.position.y > -1)) {
-			spriteRenderer.sprite = carbon;
+			//spriteRenderer.sprite = carbon;
 			rb2d.gravityScale = -0.3f;
-			Debug.Log("HI");
+			//Debug.Log("HI");
 		}
-		else if ((transform.position.y < 0) && (transform.position.x > -0.65f) && (transform.position.x < 1.5f)) {
+		else if ((transform.position.y < 0) && (transform.position.x > -0.20f) && (transform.position.x < 1.5f)) {
 
 			//(speed * Time.fixedDeltaTime) makes the object move by 'speed' units per second, framerate independent
 			rb2d.MovePosition(transform.position + dir * (4f * Time.fixedDeltaTime));

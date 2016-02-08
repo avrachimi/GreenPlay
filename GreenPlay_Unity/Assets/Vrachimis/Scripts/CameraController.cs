@@ -11,6 +11,9 @@ public class CameraController : MonoBehaviour {
 
 	private Vector3 velocity = Vector3.zero;
 
+	public float currentTime = 0f;
+	float timeToMove = 2f;
+
 	// Use this for initialization
 	void Start () {
 		
@@ -42,7 +45,16 @@ public class CameraController : MonoBehaviour {
 	{
 		Vector3 targetX = new Vector3(2 * resizeBackground.worldScreenWidth,0,-10);
 		//transform.position = Vector3.Slerp(transform.position, targetX, Time.deltaTime);
-		transform.position = Vector3.SmoothDamp(transform.position, targetX, ref velocity, time /10);
+		//transform.position = Vector3.SmoothDamp(transform.position, targetX, ref velocity, time /10);
+		if (currentTime <= timeToMove)
+		{
+			currentTime += Time.deltaTime;
+			transform.position = new Vector3(Mathf.Lerp(0f, targetX.x, currentTime / timeToMove),0,-10);
+		}
+
+		if (transform.position.x < 0.2f) {
+			//currentTime = 0;
+		}
 		/*if (transform.position.x < targetX.x + 0.02f && transform.position.x > targetX.x - 0.02f && closeScene) {
 			//Chartboost.showInterstitial(CBLocation.HomeScreen);
 			SceneManager.LoadScene(2);

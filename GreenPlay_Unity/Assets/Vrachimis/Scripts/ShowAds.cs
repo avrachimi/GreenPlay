@@ -73,6 +73,13 @@ public class ShowAds : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+		if (cameraPos.transform.position.x < 0.2f) {
+			randomNum = Random.Range(1, 7);
+			shownAppLovin = true;
+			shownAd = false;
+		}
+
 		targetX = new Vector3(2 * resizeBackground.worldScreenWidth,0,-10);
 		Debug.Log(targetX);
 		Debug.Log(cameraPos.transform.position);
@@ -82,10 +89,11 @@ public class ShowAds : MonoBehaviour {
 			//cameraPos.transform.position.x < targetX.x + 0.02f && cameraPos.transform.position.x > targetX.x - 0.02f && 
 			//Chartboost.showInterstitial(CBLocation.HomeScreen);
 			debg = "close scene";
-			SceneManager.LoadScene(2);
+			closeScene = false;
+			//SceneManager.LoadScene(2);
 		}
 
-		if (cameraPos.transform.position.x < targetX.x + 0.02f && cameraPos.transform.position.x > targetX.x - 0.09f && shownAd == false) {
+		if (cameraPos.transform.position.x < targetX.x + 0.02f && cameraPos.transform.position.x > targetX.x - 0.09f && shownAd == false && closeScene == false) {
 			Debug.Log("Applovin");
 			debg = "app lovin";
 			AppLovin.ShowInterstitial();
@@ -93,7 +101,7 @@ public class ShowAds : MonoBehaviour {
 			shownAd = true;
 			//shownAppLovin = true;
 		}
-		else if (cameraPos.transform.position.x < targetX.x + 0.02f && cameraPos.transform.position.x > targetX.x - 0.09f && shownAppLovin == false) {
+		else if (cameraPos.transform.position.x < targetX.x + 0.02f && cameraPos.transform.position.x > targetX.x - 0.09f && shownAppLovin == false && closeScene == false) {
 			//AppLovin.ShowInterstitial();
 			debg = "chartboost";
 			Debug.Log("Chartboost");

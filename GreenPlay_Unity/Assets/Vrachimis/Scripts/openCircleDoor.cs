@@ -51,7 +51,7 @@ public class openCircleDoor : MonoBehaviour {
 		Vector3 pos = Camera.main.ScreenToWorldPoint (Input.mousePosition);
 		RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero);
 		if (hit != null && hit.collider != null) {
-			Debug.Log ("I'm hitting "+hit.collider.name);
+			//Debug.Log ("I'm hitting "+hit.collider.name);
 			//LATER: make sure to check if hitting pause or mute button
 			if (hit.collider.name == "open") {
 				clldr.enabled = false;
