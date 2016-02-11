@@ -199,19 +199,19 @@ public class GameManager : MonoBehaviour {
 
 	void spawnCup()
 	{
-		Instantiate(cupObject,new Vector3(1.5f,-2.5f,0),Quaternion.identity);
+		Instantiate(cupObject,new Vector3(2.7f,-4.5f,0),Quaternion.identity);
 		cupCounter += 1;
 		if(cupCounter >= 7) CancelInvoke("spawnCup");
 	}
 
 	void spawnOxygen()
 	{
-		Instantiate(oxygenSet, new Vector3(0.5f,0,0), Quaternion.identity);
-		Instantiate(oxygenSet, new Vector3(-0.5f,0,0), Quaternion.identity);
+		Instantiate(oxygenSet, new Vector3(1f,0,0), Quaternion.identity);
+		Instantiate(oxygenSet, new Vector3(-1f,0,0), Quaternion.identity);
 		Instantiate(oxygenSet, new Vector3(0,0,0), Quaternion.identity);
-		Instantiate(oxygenSet, new Vector3(0.5f,-0.5f,0), Quaternion.identity);
-		Instantiate(oxygenSet, new Vector3(-0.5f,-0.5f,0), Quaternion.identity);
-		Instantiate(oxygenSet, new Vector3(0,-0.5f,0), Quaternion.identity);
+		Instantiate(oxygenSet, new Vector3(1f,-1f,0), Quaternion.identity);
+		Instantiate(oxygenSet, new Vector3(-1f,-1f,0), Quaternion.identity);
+		Instantiate(oxygenSet, new Vector3(0,-1f,0), Quaternion.identity);
 		oxygenCounter += 6;
 		if(oxygenCounter >= 50) CancelInvoke("spawnOxygen");
 	}

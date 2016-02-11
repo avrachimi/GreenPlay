@@ -73,7 +73,7 @@ public class CupMovement : MonoBehaviour {
 		direction = center.transform.position - transform.position;
 		ang = Vector2.Angle(rb2d.transform.position, direction);
 
-		if ((transform.position.y < 0) && (transform.position.x > -0.55f) && (transform.position.x < 1.5f)) //rotate towards the tree in the center
+		if ((transform.position.y < 0) && (transform.position.x > -1.1f) && (transform.position.x < 1f)) //rotate towards the tree in the center
 		{
 
 			Vector3 cross = Vector3.Cross(rb2d.transform.position, direction);
@@ -192,7 +192,7 @@ public class CupMovement : MonoBehaviour {
 		rb2d.MovePosition(transform.position + direct * (speed * Time.fixedDeltaTime));
 		destroyed = 7 - GameObject.FindGameObjectsWithTag("Cup").Length;
 		//transform.Translate(new Vector3(-5,0,0) * Time.deltaTime);
-		if (transform.position.x < -4.8f && destroyed < 6) {
+		if (transform.position.x < -8f && destroyed < 6) {
 			Destroy(transform.parent.gameObject);
 			gameManager.incrementCupsDestroyed(destroyed);
 			//gameManager.endGame();
@@ -222,6 +222,7 @@ public class CupMovement : MonoBehaviour {
 		if (coll.gameObject.tag == "atom") {
 			
 			doesCollide = true;
+			//coll.gameObject.transform.parent = transform.parent;
 			gameManager.incrementScore(1);
 			//Debug.Log("TRIGGEEERRRRR");
 		}
