@@ -40,6 +40,7 @@ public class GameManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
+		Application.targetFrameRate = 60;
 		score1Size = 3;
 		score2Size = 3;
 		score3Size = 4;
@@ -233,12 +234,14 @@ public class GameManager : MonoBehaviour {
 	void OnApplicationPause() 
 	{
 		save();
+		pausePressed = true;
 		Time.timeScale = 0;
 	}
 
 	void OnApplicationFocus()
 	{
 		Time.timeScale = 1;
+		pausePressed = false;
 	}
 
 	public void save()
