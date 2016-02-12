@@ -192,7 +192,7 @@ public class CupMovement : MonoBehaviour {
 		rb2d.MovePosition(transform.position + direct * (speed * Time.fixedDeltaTime));
 		destroyed = 7 - GameObject.FindGameObjectsWithTag("Cup").Length;
 		//transform.Translate(new Vector3(-5,0,0) * Time.deltaTime);
-		if (transform.position.x < -8f && destroyed < 6) {
+		if (transform.position.x < -10f && destroyed < 6) {
 			Destroy(transform.parent.gameObject);
 			gameManager.incrementCupsDestroyed(destroyed);
 			//gameManager.endGame();

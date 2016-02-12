@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour {
 	public GameObject circleDoor;
 	public GameObject circleDoor2;
 	public CameraController cameraController;
+	public GameObject cameraControllerObject;
 	public GameObject cupObject;
 	public GameObject oxygenSet;
 	public int cupsDestroyed = 0;
@@ -49,7 +50,7 @@ public class GameManager : MonoBehaviour {
 		Debug.Log("GameManager RUNS!");
 
 		Application.targetFrameRate = 60;
-		GameObject cameraControllerObject = GameObject.FindWithTag("MainCamera");
+		cameraControllerObject = GameObject.FindWithTag("MainCamera");
 		cameraController = cameraControllerObject.GetComponent<CameraController>();
 
 		scoreText.fontSize = Mathf.Min(Screen.height,Screen.width)/3;
@@ -234,7 +235,7 @@ public class GameManager : MonoBehaviour {
 	void OnApplicationPause() 
 	{
 		save();
-		pausePressed = true;
+		if (cameraControllerObject.transform.position.x < 0.5) pausePressed = true;
 		Time.timeScale = 0;
 	}
 

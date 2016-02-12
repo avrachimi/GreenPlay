@@ -11,7 +11,7 @@ public class ShowAds : MonoBehaviour {
 	public GameManager gameManager;
 
 	private bool closeScene = false;
-	private bool shownAppLovin = false;
+	private bool shownChartboost = false;
 	private bool shownAd = false;
 	private bool failedToLoadAppLovin = true;
 	private bool failedToLoadInterstitial = true;
@@ -58,7 +58,7 @@ public class ShowAds : MonoBehaviour {
 		}
 
 		randomNum = Random.Range(1, 7);
-		shownAppLovin = true;
+		shownChartboost = true;
 		shownAd = false;
 
 
@@ -76,7 +76,7 @@ public class ShowAds : MonoBehaviour {
 
 		if (cameraPos.transform.position.x < 0.2f) {
 			randomNum = Random.Range(1, 7);
-			shownAppLovin = true;
+			shownChartboost = true;
 			shownAd = false;
 		}
 
@@ -93,15 +93,15 @@ public class ShowAds : MonoBehaviour {
 			//SceneManager.LoadScene(2);
 		}
 
-		if (cameraPos.transform.position.x < targetX.x + 0.02f && cameraPos.transform.position.x > targetX.x - 0.09f && shownAd == false && closeScene == false) {
+		if (cameraPos.transform.position.x < targetX.x + 0.02f && cameraPos.transform.position.x > targetX.x - 0.09f && shownChartboost == false && closeScene == false) {
 			Debug.Log("Applovin");
 			debg = "app lovin";
 			AppLovin.ShowInterstitial();
 			//shownAppLovin = false;
-			shownAd = true;
+			shownChartboost = true;
 			//shownAppLovin = true;
 		}
-		else if (cameraPos.transform.position.x < targetX.x + 0.02f && cameraPos.transform.position.x > targetX.x - 0.09f && shownAppLovin == false && closeScene == false) {
+		else if (cameraPos.transform.position.x < targetX.x + 0.02f && cameraPos.transform.position.x > targetX.x - 0.09f && closeScene == false && shownAd == false ) {
 			//AppLovin.ShowInterstitial();
 			debg = "chartboost";
 			Debug.Log("Chartboost");
@@ -114,9 +114,10 @@ public class ShowAds : MonoBehaviour {
 			else {
 				if (!failedToLoadInterstitial) Chartboost.showInterstitial(CBLocation.Default);
 				else if (!failedToLoadMoreApps) Chartboost.showMoreApps(CBLocation.GameOver);
-				else closeScene = true;
+				else shownChartboost = false;
 			}
-			shownAppLovin = true;
+
+			shownAd = true;
 			//shownAd = true;
 		}
 	}
@@ -156,8 +157,7 @@ public class ShowAds : MonoBehaviour {
 		}
 		if (ev.Contains("DISPLAYEDINTER") || ev.Contains("VIDEOBEGAN"))
 		{
-			shownAppLovin = true;
-			shownAd = true;
+			
 			Time.timeScale = 0.0f;
 			AudioListener.pause = true;
 		}
@@ -167,7 +167,7 @@ public class ShowAds : MonoBehaviour {
 			AudioListener.pause = false;
 			//AppLovin.PreloadInterstitial();
 			closeScene = true;
-			shownAppLovin = true;
+			shownChartboost = true;
 			shownAd = true;
 		}
 		if (ev.Contains("LOADEDINTER"))
@@ -184,8 +184,7 @@ public class ShowAds : MonoBehaviour {
 			//AppLovin.PreloadInterstitial();
 			debg = "failed applovin";
 			failedToLoadAppLovin = true;
-			shownAppLovin = false;
-			shownAd = true;
+
 		}
 		if (ev.Contains("CLICKED")) {
 			//save the score and high score
@@ -195,6 +194,7 @@ public class ShowAds : MonoBehaviour {
 
 	void OnEnable() 
 	{
+		Chartboost.didDisplayInterstitial += didDisplayInterstitial;
 		Chartboost.didCacheMoreApps += didCacheMoreApps;
 		Chartboost.didCacheInterstitial += didCacheInterstitial;
 		Chartboost.didFailToLoadMoreApps += didFailToLoadMoreApps;
@@ -210,6 +210,7 @@ public class ShowAds : MonoBehaviour {
 
 	void OnDisable()
 	{
+		Chartboost.didDisplayInterstitial -= didDisplayInterstitial;
 		Chartboost.didCacheMoreApps -= didCacheMoreApps;
 		Chartboost.didCacheInterstitial -= didCacheInterstitial;
 		Chartboost.didFailToLoadMoreApps -= didFailToLoadMoreApps;
@@ -226,6 +227,12 @@ public class ShowAds : MonoBehaviour {
 	void didInitialize(bool status) {
 		AddLog(string.Format("didInitialize: {0}", status));
 		debg = "CB Init";
+
+	}
+
+	void didDisplayInterstitial(CBLocation location) {
+		shownChartboost = true;
+		shownAd = true;
 	}
 
 	void didCacheInterstitial(CBLocation location) {
@@ -236,6 +243,8 @@ public class ShowAds : MonoBehaviour {
 		AddLog(string.Format("didFailToLoadInterstitial: {0} at location {1}", error, location));
 		debg = "failed chartboost";
 		failedToLoadInterstitial = true;
+		shownChartboost = false;
+		shownAd = true;
 		//closeScene = true;
 	}
 
@@ -243,12 +252,16 @@ public class ShowAds : MonoBehaviour {
 		AddLog("didDismissInterstitial: " + location);
 		debg = "dismiss chartboost";
 		closeScene = true;
+		shownChartboost = true; //not sure
+		shownAd = true;
 	}
 
 	void didCloseInterstitial(CBLocation location) {
 		AddLog("didCloseInterstitial: " + location);
 		debg = "closed chartboost";
 		closeScene = true;
+		shownChartboost = true;
+		shownAd = true;
 	}
 
 	void didClickMoreApps(CBLocation location) {
@@ -264,17 +277,21 @@ public class ShowAds : MonoBehaviour {
 	// Called after a MoreApps page has been dismissed.
 	void didDismissMoreApps(CBLocation location) {
 		closeScene = true;
+		shownChartboost = false; //not sure
+		shownAd = true;
 	}
 
 	// Called after a MoreApps page has been closed.
 	void didCloseMoreApps(CBLocation location) {
 		closeScene = true;
+		shownChartboost = true;
+		shownAd = true;
 	}
 	// Called after a MoreApps page attempted to load from the Chartboost API
 	// servers but failed.
 	void didFailToLoadMoreApps(CBLocation location, CBImpressionError error) {
 		failedToLoadMoreApps = true;
-		shownAppLovin = true;
+		//shownChartboost = true;
 	}
 
 	void didCacheMoreApps(CBLocation location) {
