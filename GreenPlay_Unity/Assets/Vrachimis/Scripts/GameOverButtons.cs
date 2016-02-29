@@ -29,6 +29,17 @@ public class GameOverButtons : MonoBehaviour {
 	public ResizeBackground resizeBackground;
 	public GameManager gameManager;
 	private Vector3 targetX;
+
+	private bool inShop = false;
+	public GUIStyle buyCoinsStyle;
+	public GUIStyle buyMoneyStyle;
+	public GUIStyle shopStyle;
+	public Vector2 buyCoinsPos;
+	public Vector2 buyMoneyPos;
+	public Vector2 shopPos;
+	public Vector2 buyCoinsSize;
+	public Vector2 buyMoneySize;
+	public Vector2 shopSize;
 	// Use this for initialization
 	void Start () {
 		score = PlayerPrefs.GetInt("Score");
@@ -88,12 +99,32 @@ public class GameOverButtons : MonoBehaviour {
 			else if (score.ToString().Length == 4) {
 				GUI.Label(new Rect(Screen.width/2 - (Screen.width * scorePos4.x), Screen.height/2 - (Screen.height * scorePos4.y), 500, 100), "" + score, scoreStyle);
 			}
+
+			if (inShop) {
+				if (GUI.Button(new Rect(Screen.width/2 - (Screen.width * shopPos.x ), Screen.height/2 - (Screen.height * shopPos.y),0,0),"",shopStyle)) {
+					//do nothing. just to display the graphic
+				}
+				if (GUI.Button(new Rect(Screen.width/2 - (Screen.width * buyCoinsPos.x ), Screen.height/2 - (Screen.height * buyCoinsPos.y), Screen.width - (Screen.width * buyCoinsSize.x) , Screen.height - (Screen.height * buyCoinsSize.y)),"",buyCoinsStyle)) {
+					//pausePressed = false;
+					inShop = false;
+				}
+				if (GUI.Button(new Rect(Screen.width/2 - (Screen.width * buyMoneyPos.x ), Screen.height/2 - (Screen.height * buyMoneyPos.y), Screen.width - (Screen.width * buyMoneySize.x) , Screen.height - (Screen.height * buyMoneySize.y)),"",buyMoneyStyle)) {
+					inShop = false;
+				}
+			}
 		}
 
 	}
 	
 	// Update is called once per frame
 	void Update () {
+
+		buyCoinsStyle.fixedWidth = Screen.width - (Screen.width * buyCoinsSize.x);
+		buyCoinsStyle.fixedHeight = Screen.height - (Screen.height * buyCoinsSize.y);
+		buyMoneyStyle.fixedWidth = Screen.width - (Screen.width * buyMoneySize.x);
+		buyMoneyStyle.fixedHeight = Screen.height - (Screen.height * buyMoneySize.y);
+		shopStyle.fixedWidth = Screen.width - (Screen.width * shopSize.x);
+		shopStyle.fixedHeight = Screen.height - (Screen.height * shopSize.y);
 		
 		targetX = new Vector3(2 * resizeBackground.worldScreenWidth,0,-10);
 
@@ -137,24 +168,29 @@ public class GameOverButtons : MonoBehaviour {
 					if (hit != null && hit.collider != null) {
 						Debug.Log ("I'm hitting "+hit.collider.name);
 						//LATER: make sure to check if hitting pause or mute button
-						if (hit.collider.name == "Play") {
+						if (hit.collider.name == "Play" && inShop == false) {
 							Debug.Log ("PLay");
 							//SceneManager.LoadScene(1);
 							transform.position = new Vector3(0,0,-10);
+							Time.timeScale = 1;
 							gameManager.startGame();
 						}
-						else if (hit.collider.name == "NoAds") {
+						else if (hit.collider.name == "NoAds" && inShop == false) {
 							Debug.Log ("ADS");
 							//open No Ads app in the App Store
 							Application.OpenURL("https://play.google.com/store/apps/details?id=com.lego.nexoknights.merlok&hl=en");
 						}
 						else if (hit.collider.name == "Store") {
 							Debug.Log ("Shop");
+							inShop = true;
 							//Load the store scene
 						}
-						else if (hit.collider.name == "Leaderboards") {
+						else if (hit.collider.name == "Leaderboards" && inShop == false) {
 							Debug.Log("Lead");
 							//show leaderboards
+						}
+						else if (hit.collider.name == "Exit for Shop") {
+							inShop = false;
 						}
 
 

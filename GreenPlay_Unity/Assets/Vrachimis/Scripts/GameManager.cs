@@ -63,7 +63,7 @@ public class GameManager : MonoBehaviour {
 		rb2dCircleDoor = circleDoor.GetComponent<Rigidbody2D>();
 		rb2dCircleDoor2 = circleDoor2.GetComponent<Rigidbody2D>();
 
-		InvokeRepeating("spawnCup",0f,2.045f); //2.922f
+		InvokeRepeating("spawnCup",0f,2.2f); //2.922f
 		InvokeRepeating("spawnOxygen",0f,0.2f);
 
 		highScore = PlayerPrefs.GetInt("HighScore");
@@ -170,7 +170,7 @@ public class GameManager : MonoBehaviour {
 			if (GUI.Button(new Rect(Screen.width/2 - (Screen.width * pausePos.x ), Screen.height/2 - (Screen.height * pausePos.y),0,0),"",pauseStyle)) {
 				//do nothing. just to display the graphic
 			}
-			if (GUI.Button(new Rect(Screen.width/2 - (Screen.width * playPos.x ), Screen.height/2 - (Screen.height * playPos.y), 300 , Screen.height - (Screen.height * playSize.y)),"",playStyle)) {
+			if (GUI.Button(new Rect(Screen.width/2 - (Screen.width * playPos.x ), Screen.height/2 - (Screen.height * playPos.y), Screen.width - (Screen.width * playSize.x) , Screen.height - (Screen.height * playSize.y)),"",playStyle)) {
 				//pausePressed = false;
 				pausePressed = togglePause();
 			}
