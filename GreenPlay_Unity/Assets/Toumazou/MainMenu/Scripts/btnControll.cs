@@ -53,8 +53,13 @@ public class btnControll : MonoBehaviour {
 	void OnGUI()
 	{
 		if (!inShop) {
-			if (GUI.Button(new Rect(Screen.width/2 - (Screen.width * btnAdsPos.x ), Screen.height/2 - (Screen.height * btnAdsPos.y), Screen.width - (Screen.width * btnAdsSize) , Screen.width - (Screen.width * btnAdsSize)), btnAds, btnAdsStyle))
-				Application.OpenURL("https://play.google.com/store/apps/details?id=com.lego.nexoknights.merlok&hl=en");
+			if (GUI.Button(new Rect(Screen.width/2 - (Screen.width * btnAdsPos.x ), Screen.height/2 - (Screen.height * btnAdsPos.y), Screen.width - (Screen.width * btnAdsSize) , Screen.width - (Screen.width * btnAdsSize)), btnAds, btnAdsStyle)) {
+				//Application.OpenURL("https://play.google.com/store/apps/details?id=com.lego.nexoknights.merlok&hl=en");
+				/*int x = 237;
+				PlayerPrefs.SetInt("HighScore", x);
+				PlayerPrefs.Save();*/
+			}
+				
 			if (GUI.Button (new Rect (Screen.width / 2 - (Screen.width * btnPlayPos.x), Screen.height / 2 - (Screen.height * btnPlayPos.y), Screen.width - (Screen.width * btnPlaySize), Screen.width - (Screen.width * btnPlaySize)), btnplay, btnPlayStyle)) {
 				SceneManager.LoadScene(1);
 			}

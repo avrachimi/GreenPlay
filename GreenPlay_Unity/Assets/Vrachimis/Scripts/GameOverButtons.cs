@@ -178,7 +178,7 @@ public class GameOverButtons : MonoBehaviour {
 						else if (hit.collider.name == "NoAds" && inShop == false) {
 							Debug.Log ("ADS");
 							//open No Ads app in the App Store
-							Application.OpenURL("https://play.google.com/store/apps/details?id=com.lego.nexoknights.merlok&hl=en");
+							//Application.OpenURL("https://play.google.com/store/apps/details?id=com.lego.nexoknights.merlok&hl=en");
 						}
 						else if (hit.collider.name == "Store") {
 							Debug.Log ("Shop");
