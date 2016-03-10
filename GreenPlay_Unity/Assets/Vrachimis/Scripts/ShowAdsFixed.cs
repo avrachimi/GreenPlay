@@ -74,10 +74,12 @@ public class ShowAdsFixed : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+
 		if (cameraPos.transform.position.x < 0.2f) {
 			randomNum = Random.Range(1, 7);
 			shownAppLovin = true;
 			shownAd = false;
+			closeScene = true;
 		}
 
 		targetX = new Vector3(2 * resizeBackground.worldScreenWidth,0,-10);

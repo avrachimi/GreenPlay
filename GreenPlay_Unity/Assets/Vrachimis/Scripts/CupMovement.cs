@@ -220,11 +220,12 @@ public class CupMovement : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D coll) //LAG CHANCE
 	{
 		if (coll.gameObject.tag == "atom") {
-			
-			doesCollide = true;
-			//coll.gameObject.transform.parent = transform.parent;
-			gameManager.incrementScore(1);
-			//Debug.Log("TRIGGEEERRRRR");
+			if (transform.position.y > 4) {
+				doesCollide = true;
+				//coll.gameObject.transform.parent = transform.parent;
+				gameManager.incrementScore(1);
+				//Debug.Log("TRIGGEEERRRRR");
+			}
 		}
 	}
 

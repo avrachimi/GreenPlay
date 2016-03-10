@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using GooglePlayGames;
+using GooglePlayGames.BasicApi;
+
 
 public class btnControll : MonoBehaviour {
 
@@ -47,6 +50,21 @@ public class btnControll : MonoBehaviour {
 
 
 	void Start () {
+
+		PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder()
+			// require access to a player's Google+ social graph to sign in
+			.RequireGooglePlus()
+			.Build();
+
+		PlayGamesPlatform.InitializeInstance(config);
+
+		PlayGamesPlatform.Activate();
+
+		// authenticate user:
+		Social.localUser.Authenticate((bool success) => {
+			// handle success or failure
+		});
+
 		spriteRenderer = GetComponent<SpriteRenderer>();
 	}
 
@@ -58,6 +76,7 @@ public class btnControll : MonoBehaviour {
 				/*int x = 237;
 				PlayerPrefs.SetInt("HighScore", x);
 				PlayerPrefs.Save();*/
+
 			}
 				
 			if (GUI.Button (new Rect (Screen.width / 2 - (Screen.width * btnPlayPos.x), Screen.height / 2 - (Screen.height * btnPlayPos.y), Screen.width - (Screen.width * btnPlaySize), Screen.width - (Screen.width * btnPlaySize)), btnplay, btnPlayStyle)) {

@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using GooglePlayGames;
+using GooglePlayGames.BasicApi;
+using UnityEngine.SocialPlatforms;
 
 public class GameManager : MonoBehaviour {
 
@@ -91,6 +94,10 @@ public class GameManager : MonoBehaviour {
 		if (score > highScore) {
 			highScore = score;
 			PlayerPrefs.SetInt("HighScore", highScore);
+			// post score 12345 to leaderboard ID "Cfji293fjsie_QA")
+			Social.ReportScore(highScore, "CgkIw6a8t_gCEAIQBg", (bool success) => {
+				// handle success or failure
+			});
 
 		}
 
@@ -124,6 +131,39 @@ public class GameManager : MonoBehaviour {
 	public void incrementScore(int amount)
 	{
 		score += amount; //changed it for testing new raycast
+		// unlock achievement (achievement ID "Cfjewijawiu_QA")
+		Social.ReportProgress("CgkIw6a8t_gCEAIQAQ", 100.0f, (bool success) => {
+			// handle success or failure
+		});
+
+		if (score >= 50) {
+			Social.ReportProgress("CgkIw6a8t_gCEAIQAg", 100.0f, (bool success) => {
+				// handle success or failure
+			});
+		}
+		else if (score >= 75) {
+			Social.ReportProgress("CgkIw6a8t_gCEAIQAw", 100.0f, (bool success) => {
+				// handle success or failure
+			});
+		}
+		else if (score >= 100) {
+			Social.ReportProgress("CgkIw6a8t_gCEAIQBA", 100.0f, (bool success) => {
+				// handle success or failure
+			});
+		}
+		else if (score >= 200) {
+			Social.ReportProgress("CgkIw6a8t_gCEAIQBQ", 100.0f, (bool success) => {
+				// handle success or failure
+			});
+		}
+		else if (score >= 300) {
+			Social.ReportProgress("CgkIw6a8t_gCEAIQBw", 100.0f, (bool success) => {
+				// handle success or failure
+			});
+		}
+		else if (score >= 400) {
+
+		}
 		//score = amount;
 		updateScore();
 	}
@@ -250,5 +290,7 @@ public class GameManager : MonoBehaviour {
 		PlayerPrefs.SetInt("HighScore", highScore);
 		PlayerPrefs.SetInt("Score", score);
 		PlayerPrefs.Save();
+
+
 	}
 }

@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using GooglePlayGames;
+using UnityEngine.SocialPlatforms;
 
 public class GameOverButtons : MonoBehaviour {
 
@@ -179,6 +181,7 @@ public class GameOverButtons : MonoBehaviour {
 							Debug.Log ("ADS");
 							//open No Ads app in the App Store
 							//Application.OpenURL("https://play.google.com/store/apps/details?id=com.lego.nexoknights.merlok&hl=en");
+							Social.ShowAchievementsUI();
 						}
 						else if (hit.collider.name == "Store") {
 							Debug.Log ("Shop");
@@ -186,8 +189,9 @@ public class GameOverButtons : MonoBehaviour {
 							//Load the store scene
 						}
 						else if (hit.collider.name == "Leaderboards" && inShop == false) {
-							Debug.Log("Lead");
-							//show leaderboards
+							//Debug.Log("Lead");
+							// show leaderboard UI
+							Social.ShowLeaderboardUI();
 						}
 						else if (hit.collider.name == "Exit for Shop") {
 							inShop = false;
