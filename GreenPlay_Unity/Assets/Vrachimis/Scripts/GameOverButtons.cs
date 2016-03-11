@@ -181,12 +181,13 @@ public class GameOverButtons : MonoBehaviour {
 							Debug.Log ("ADS");
 							//open No Ads app in the App Store
 							//Application.OpenURL("https://play.google.com/store/apps/details?id=com.lego.nexoknights.merlok&hl=en");
-							Social.ShowAchievementsUI();
+
 						}
 						else if (hit.collider.name == "Store") {
 							Debug.Log ("Shop");
-							inShop = true;
-							//Load the store scene
+							//inShop = true;
+							//show achievements
+							Social.ShowAchievementsUI();
 						}
 						else if (hit.collider.name == "Leaderboards" && inShop == false) {
 							//Debug.Log("Lead");

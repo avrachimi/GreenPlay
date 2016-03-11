@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine.SceneManagement;
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
+using UnityEngine.SocialPlatforms;
 
 
 public class btnControll : MonoBehaviour {
@@ -83,7 +84,8 @@ public class btnControll : MonoBehaviour {
 				SceneManager.LoadScene(1);
 			}
 			if (GUI.Button (new Rect (Screen.width / 2 - (Screen.width * btnShopPos.x), Screen.height / 2 - (Screen.height * btnShopPos.y), Screen.width - (Screen.width * btnShopSize), Screen.width - (Screen.width * btnShopSize)), btnShop, btnShopStyle)) {
-				inShop = true;
+				//inShop = true;
+				Social.ShowAchievementsUI();
 			}
 		}
 

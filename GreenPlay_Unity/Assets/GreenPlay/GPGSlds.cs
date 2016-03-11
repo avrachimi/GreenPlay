@@ -25,12 +25,21 @@ namespace GreenPlay
 {
 public static class GPGSlds
 {
-        public const string achievement_score_reached_100 = "CgkIw6a8t_gCEAIQBA"; // <GPGSID>
-        public const string achievement_played_for_first_time = "CgkIw6a8t_gCEAIQAQ"; // <GPGSID>
-        public const string achievement_score_reached_200 = "CgkIw6a8t_gCEAIQBQ"; // <GPGSID>
-        public const string leaderboard_highest_score = "CgkIw6a8t_gCEAIQBg"; // <GPGSID>
-        public const string achievement_score_reached_50 = "CgkIw6a8t_gCEAIQAg"; // <GPGSID>
         public const string achievement_score_reached_75 = "CgkIw6a8t_gCEAIQAw"; // <GPGSID>
+        public const string achievement_score_reached_50 = "CgkIw6a8t_gCEAIQAg"; // <GPGSID>
+        public const string achievement_score_reached_900 = "CgkIw6a8t_gCEAIQDg"; // <GPGSID>
+        public const string leaderboard_high_score = "CgkIw6a8t_gCEAIQBg"; // <GPGSID>
+        public const string achievement_congratulations_you_planted_one_tree_ = "CgkIw6a8t_gCEAIQBw"; // <GPGSID>
+        public const string achievement_score_reached_1000 = "CgkIw6a8t_gCEAIQDw"; // <GPGSID>
+        public const string achievement_played_for_first_time = "CgkIw6a8t_gCEAIQAQ"; // <GPGSID>
+        public const string achievement_score_reached_800 = "CgkIw6a8t_gCEAIQDQ"; // <GPGSID>
+        public const string achievement_score_reached_700 = "CgkIw6a8t_gCEAIQDA"; // <GPGSID>
+        public const string achievement_score_reached_600 = "CgkIw6a8t_gCEAIQCw"; // <GPGSID>
+        public const string achievement_score_reached_500 = "CgkIw6a8t_gCEAIQCg"; // <GPGSID>
+        public const string achievement_score_reached_400 = "CgkIw6a8t_gCEAIQCQ"; // <GPGSID>
+        public const string achievement_score_reached_300 = "CgkIw6a8t_gCEAIQCA"; // <GPGSID>
+        public const string achievement_score_reached_200 = "CgkIw6a8t_gCEAIQBQ"; // <GPGSID>
+        public const string achievement_score_reached_100 = "CgkIw6a8t_gCEAIQBA"; // <GPGSID>
 
 }
 }

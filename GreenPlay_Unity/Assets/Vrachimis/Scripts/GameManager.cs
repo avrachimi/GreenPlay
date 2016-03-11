@@ -94,7 +94,7 @@ public class GameManager : MonoBehaviour {
 		if (score > highScore) {
 			highScore = score;
 			PlayerPrefs.SetInt("HighScore", highScore);
-			// post score 12345 to leaderboard ID "Cfji293fjsie_QA")
+			// post highScore to leaderboard ID "CgkIw6a8t_gCEAIQBg")
 			Social.ReportScore(highScore, "CgkIw6a8t_gCEAIQBg", (bool success) => {
 				// handle success or failure
 			});
@@ -132,37 +132,71 @@ public class GameManager : MonoBehaviour {
 	{
 		score += amount; //changed it for testing new raycast
 		// unlock achievement (achievement ID "Cfjewijawiu_QA")
-		Social.ReportProgress("CgkIw6a8t_gCEAIQAQ", 100.0f, (bool success) => {
-			// handle success or failure
-		});
+		if (score == 1) {
+			Social.ReportProgress("CgkIw6a8t_gCEAIQAQ", 100.0f, (bool success) => {
+				// handle success or failure
+			});
+		}
 
-		if (score >= 50) {
+		if (score == 50) {
 			Social.ReportProgress("CgkIw6a8t_gCEAIQAg", 100.0f, (bool success) => {
 				// handle success or failure
 			});
 		}
-		else if (score >= 75) {
+		else if (score == 75) {
 			Social.ReportProgress("CgkIw6a8t_gCEAIQAw", 100.0f, (bool success) => {
 				// handle success or failure
 			});
 		}
-		else if (score >= 100) {
+		else if (score == 100) {
 			Social.ReportProgress("CgkIw6a8t_gCEAIQBA", 100.0f, (bool success) => {
 				// handle success or failure
 			});
 		}
-		else if (score >= 200) {
+		else if (score == 200) {
 			Social.ReportProgress("CgkIw6a8t_gCEAIQBQ", 100.0f, (bool success) => {
 				// handle success or failure
 			});
 		}
-		else if (score >= 300) {
-			Social.ReportProgress("CgkIw6a8t_gCEAIQBw", 100.0f, (bool success) => {
+		else if (score == 300) {
+			Social.ReportProgress("CgkIw6a8t_gCEAIQCA", 100.0f, (bool success) => {
 				// handle success or failure
 			});
 		}
-		else if (score >= 400) {
-
+		else if (score == 400) {
+			Social.ReportProgress("CgkIw6a8t_gCEAIQCQ", 100.0f, (bool success) => {
+				// handle success or failure
+			});
+		}
+		else if (score == 500) {
+			Social.ReportProgress("CgkIw6a8t_gCEAIQCg", 100.0f, (bool success) => {
+				// handle success or failure
+			});
+		}
+		else if (score == 600) {
+			Social.ReportProgress("CgkIw6a8t_gCEAIQCw", 100.0f, (bool success) => {
+				// handle success or failure
+			});
+		}
+		else if (score == 700) {
+			Social.ReportProgress("CgkIw6a8t_gCEAIQDA", 100.0f, (bool success) => {
+				// handle success or failure
+			});
+		}
+		else if (score == 800) {
+			Social.ReportProgress("CgkIw6a8t_gCEAIQDQ", 100.0f, (bool success) => {
+				// handle success or failure
+			});
+		}
+		else if (score == 900) {
+			Social.ReportProgress("CgkIw6a8t_gCEAIQDg", 100.0f, (bool success) => {
+				// handle success or failure
+			});
+		}
+		else if (score == 1000) {
+			Social.ReportProgress("CgkIw6a8t_gCEAIQDw", 100.0f, (bool success) => {
+				// handle success or failure
+			});
 		}
 		//score = amount;
 		updateScore();
@@ -180,8 +214,10 @@ public class GameManager : MonoBehaviour {
 		foreach (Touch touch in Input.touches)
 		{
 			if (touch.phase == TouchPhase.Began) {
-				rb2dCircleDoor.MoveRotation(-90f);
-				rb2dCircleDoor2.MoveRotation(90f);
+				//rb2dCircleDoor.MoveRotation(-90f);
+				//rb2dCircleDoor2.MoveRotation(90f);
+				rb2dCircleDoor.transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0,0,-90), 10000 * Time.deltaTime);
+				rb2dCircleDoor2.transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0,0,90), 10000 * Time.deltaTime);
 				//circleDoor.transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0,0,-90), 1000 * Time.deltaTime);
 				//collCircleDoor.enabled = false;
 				Vector3 pos = Camera.main.ScreenToWorldPoint (Input.mousePosition);
@@ -197,8 +233,10 @@ public class GameManager : MonoBehaviour {
 			}
 			else if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled) {
 				//collCircleDoor.enabled = true;
-				rb2dCircleDoor.MoveRotation(0f);
-				rb2dCircleDoor2.MoveRotation(0f);
+				//rb2dCircleDoor.MoveRotation(0f);
+				//rb2dCircleDoor2.MoveRotation(0f);
+				rb2dCircleDoor.transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0,0,0), 10000 * Time.deltaTime);
+				rb2dCircleDoor2.transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0,0,0), 10000 * Time.deltaTime);
 				//circleDoor.transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0,0,0), 1000 * Time.deltaTime);
 			}
 		}
