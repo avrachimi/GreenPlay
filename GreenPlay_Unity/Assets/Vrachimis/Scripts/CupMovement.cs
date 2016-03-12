@@ -73,14 +73,14 @@ public class CupMovement : MonoBehaviour {
 		direction = center.transform.position - transform.position;
 		ang = Vector2.Angle(rb2d.transform.position, direction);
 
-		if ((transform.position.y < 0) && (transform.position.x > -1.1f) && (transform.position.x < 1f)) //rotate towards the tree in the center
+		if ((transform.position.y < 0) && (transform.position.x > -1.3f) && (transform.position.x < 1.7f)) //rotate towards the tree in the center
 		{
 
 			Vector3 cross = Vector3.Cross(rb2d.transform.position, direction);
 
 			if (cross.z > 0) ang = 360 - ang;
 			//rb2d.MoveRotation(ang);
-			transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0,0,ang), 500 * Time.deltaTime); //LAG CHANCE
+			transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0,0,ang), 1000 * Time.deltaTime); //LAG CHANCE
 			doesCollide = false;
 
 		} 
@@ -220,7 +220,7 @@ public class CupMovement : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D coll) //LAG CHANCE
 	{
 		if (coll.gameObject.tag == "atom") {
-			if (transform.position.y > 4) {
+			if (transform.position.y > 4 && transform.position.x > -1.47f) {
 				doesCollide = true;
 				//coll.gameObject.transform.parent = transform.parent;
 				gameManager.incrementScore(1);

@@ -37,15 +37,18 @@ public class OxygenGravity : MonoBehaviour {
 			rb2d.gravityScale = -0.3f;
 			//Debug.Log("HI");
 		}
-		else if ((transform.position.y < 0) && (transform.position.x > -0.3f) && (transform.position.x < 1f)) {
+		else if ((transform.position.y < 0) && (transform.position.x > -0.5f) && (transform.position.x < 1f)) {
 
 			//(speed * Time.fixedDeltaTime) makes the object move by 'speed' units per second, framerate independent
-			rb2d.MovePosition(transform.position + dir * (6f * Time.fixedDeltaTime));
+			rb2d.MovePosition(transform.position + dir * (6.5f * Time.fixedDeltaTime));
 			//rb2d.AddForce(new Vector2(0,force/100));
 		}
 		else if (transform.position.x < 0.2f && transform.position.x > -0.2f && transform.position.y > 3.22f && transform.position.y < 12f) {
 			rb2d.MovePosition(transform.position + dir * (7f * Time.fixedDeltaTime));
 			//rb2d.AddForce(new Vector2(0,force/100));
+		}
+		else if ((transform.position.x < -2.3f) && (transform.position.y < -1)) {
+			rb2d.velocity = new Vector2(0,0);
 		}
 		else {
 			rb2d.gravityScale = -acceleration;
