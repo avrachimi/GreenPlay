@@ -16,9 +16,13 @@ public class btnControll : MonoBehaviour {
 	public Texture btnplay;
 	public Texture btnShop;
 	public Texture btnAds;
+	public Texture googlePlayGames;
+	public Texture btnInfo;
 	public GUIStyle btnAdsStyle;
 	public GUIStyle btnPlayStyle;
 	public GUIStyle btnShopStyle;
+	public GUIStyle googlePlayGamesStyle;
+	public GUIStyle btnInfoStyle;
 
 
 	public float playX;
@@ -34,9 +38,14 @@ public class btnControll : MonoBehaviour {
 	public float btnPlaySize;
 	public Vector2 btnShopPos;
 	public float btnShopSize;
+	public Vector2 googlePlayGamesPos;
+	public float googlePlayGamesSize;
+	public Vector2 btnInfoPos;
+	public float btnInfoSize;
 
 	//TA PUKATO VARIABLES EKAMATA EGO GIA TO STORE SCREEN; VRACHIMIS
 	private bool inShop = false;
+	private bool showInfo = false;
 
 	public GUIStyle buyCoinsStyle;
 	public GUIStyle buyMoneyStyle;
@@ -102,6 +111,25 @@ public class btnControll : MonoBehaviour {
 				inShop = false;
 			}
 		}
+
+		if (GUI.Button(new Rect(Screen.width/2 - (Screen.width * googlePlayGamesPos.x ), Screen.height/2 - (Screen.height * googlePlayGamesPos.y), Screen.width - (Screen.width * googlePlayGamesSize) , Screen.width - (Screen.width * googlePlayGamesSize)), googlePlayGames, googlePlayGamesStyle)) {
+
+			// sign out
+			PlayGamesPlatform.Instance.SignOut();
+
+			// authenticate user:
+			Social.localUser.Authenticate((bool success) => {
+				// handle success or failure
+			});
+		}
+		if (GUI.Button(new Rect(Screen.width/2 - (Screen.width * btnInfoPos.x ), Screen.height/2 - (Screen.height * btnInfoPos.y), Screen.width - (Screen.width * btnInfoSize) , Screen.width - (Screen.width * btnInfoSize)), btnInfo, btnInfoStyle)) {
+			//info
+			showInfo = true;
+		}
+
+		if (showInfo) {
+			
+		}
 	}
 	
 	// Update is called once per frame
@@ -120,6 +148,8 @@ public class btnControll : MonoBehaviour {
 		btnAdsStyle.fixedWidth = Screen.width - (Screen.width * btnAdsSize);
 		btnPlayStyle.fixedWidth = Screen.width - (Screen.width * btnPlaySize);
 		btnShopStyle.fixedWidth = Screen.width - (Screen.width * btnShopSize);
+		googlePlayGamesStyle.fixedWidth = Screen.width - (Screen.width * googlePlayGamesSize);
+		googlePlayGamesStyle.fixedHeight = Screen.height - (Screen.height * googlePlayGamesSize);
 
 		Vector3 pos = Camera.main.ScreenToWorldPoint (Input.mousePosition);
 		RaycastHit2D hit = Physics2D.Raycast(pos, Vector2.zero);
@@ -128,6 +158,7 @@ public class btnControll : MonoBehaviour {
 			//LATER: make sure to check if hitting pause or mute button
 			if (hit.collider.name == "background") {
 				inShop = false;
+				showInfo = false;
 			}
 
 
