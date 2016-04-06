@@ -880,8 +880,8 @@ namespace ChartboostSDK {
 
 #if UNITY_ANDROID
 		private Rect windowRect;
-		Texture2D transparentTexture = new Texture2D(1,1);
-		GUIStyle transparent = new GUIStyle();
+		Texture2D transparentTexture;
+		GUIStyle transparent;
 
 		void OnGUI() {
 			// Developers - feel free to comment out this block of code if you are not using
@@ -968,14 +968,17 @@ namespace ChartboostSDK {
 		private void didFailToLoadInterstitialEvent(string dataString) {
 			Hashtable data = (Hashtable)CBJSON.Deserialize(dataString);
 			CBImpressionError error = impressionErrorFromInt(data["errorCode"]);
-			
 			if (didFailToLoadInterstitial != null)
 				didFailToLoadInterstitial(CBLocation.locationFromName(data["location"] as string), error);
 		}
 		
 		private void didDismissInterstitialEvent(string location) {
 			doUnityPause(false, false);
-			
+			#if UNITY_ANDROID
+			if(CBExternal.isWebViewEnabled()) {
+				Screen.orientation = ScreenOrientation.AutoRotation;
+			}
+			#endif
 			if (didDismissInterstitial != null)
 				didDismissInterstitial(CBLocation.locationFromName(location));
 		}
@@ -1008,6 +1011,11 @@ namespace ChartboostSDK {
 
 		public void didDisplayInterstitialEvent(string location) {
 			doUnityPause(true, true);
+			#if UNITY_ANDROID
+			if(CBExternal.isWebViewEnabled()) {
+				Screen.orientation = Screen.orientation;
+			}
+			#endif
 			if(didDisplayInterstitial != null)
 			{
 				didDisplayInterstitial(CBLocation.locationFromName(location));
@@ -1074,14 +1082,17 @@ namespace ChartboostSDK {
 		private void didFailToLoadRewardedVideoEvent(string dataString) {
 			Hashtable data = (Hashtable)CBJSON.Deserialize(dataString);
 			CBImpressionError error = impressionErrorFromInt(data["errorCode"]);
-			
 			if (didFailToLoadRewardedVideo != null)
 				didFailToLoadRewardedVideo(CBLocation.locationFromName(data["location"] as string), error);
 		}
 		
 		private void didDismissRewardedVideoEvent(string location) {
 			doUnityPause(false, false);
-			
+			#if UNITY_ANDROID
+			if(CBExternal.isWebViewEnabled()) {
+				Screen.orientation = ScreenOrientation.AutoRotation;
+			}
+			#endif
 			if (didDismissRewardedVideo != null)
 				didDismissRewardedVideo(CBLocation.locationFromName(location));
 		}
@@ -1130,6 +1141,11 @@ namespace ChartboostSDK {
 
 		private void didDisplayRewardedVideoEvent(string location) {
 			doUnityPause(true, true);
+			#if UNITY_ANDROID
+			if(CBExternal.isWebViewEnabled()) {
+				Screen.orientation = Screen.orientation;
+			}
+			#endif
 			if (didDisplayRewardedVideo != null) 
 			{
 				didDisplayRewardedVideo(CBLocation.locationFromName(location));

@@ -53,13 +53,13 @@ public class CupMovement : MonoBehaviour {
 		rb2d  = GetComponent<Rigidbody2D>();
 		//invokeRepeating
 		//InvokeRepeating("incrementSpeed",0,15);
-		if (gameManager.cupCounter == 7) InvokeRepeating("incrementSpeed",0,15);
-		else if (gameManager.cupCounter == 6) InvokeRepeating("incrementSpeed",2.045f,15f);
-		else if (gameManager.cupCounter == 5) InvokeRepeating("incrementSpeed",2*(2.045f),15f);
-		else if (gameManager.cupCounter == 4) InvokeRepeating("incrementSpeed",3*(2.045f),15f);
-		else if (gameManager.cupCounter == 3) InvokeRepeating("incrementSpeed",4*(2.045f),15f);
-		else if (gameManager.cupCounter == 2) InvokeRepeating("incrementSpeed",5*(2.045f),15f);
-		else if (gameManager.cupCounter == 1) InvokeRepeating("incrementSpeed",6*(2.045f),15f);
+		if (gameManager.cupCounter == 7) InvokeRepeating("incrementSpeed",0,7.5f);
+		else if (gameManager.cupCounter == 6) InvokeRepeating("incrementSpeed",2.045f,7.5f);
+		else if (gameManager.cupCounter == 5) InvokeRepeating("incrementSpeed",2*(2.045f),7.5f);
+		else if (gameManager.cupCounter == 4) InvokeRepeating("incrementSpeed",3*(2.045f),7.5f);
+		else if (gameManager.cupCounter == 3) InvokeRepeating("incrementSpeed",4*(2.045f),7.5f);
+		else if (gameManager.cupCounter == 2) InvokeRepeating("incrementSpeed",5*(2.045f),7.5f);
+		else if (gameManager.cupCounter == 1) InvokeRepeating("incrementSpeed",6*(2.045f),7.5f);
 	
 	}
 	

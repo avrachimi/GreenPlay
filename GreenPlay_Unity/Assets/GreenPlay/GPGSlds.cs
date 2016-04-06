@@ -25,11 +25,14 @@ namespace GreenPlay
 {
 public static class GPGSlds
 {
+        public const string achievement_score_reached_1200 = "CgkIw6a8t_gCEAIQEw"; // <GPGSID>
         public const string achievement_score_reached_75 = "CgkIw6a8t_gCEAIQAw"; // <GPGSID>
+        public const string achievement_score_reached_1300 = "CgkIw6a8t_gCEAIQFA"; // <GPGSID>
         public const string achievement_score_reached_50 = "CgkIw6a8t_gCEAIQAg"; // <GPGSID>
         public const string achievement_score_reached_900 = "CgkIw6a8t_gCEAIQDg"; // <GPGSID>
-        public const string leaderboard_high_score = "CgkIw6a8t_gCEAIQBg"; // <GPGSID>
-        public const string achievement_congratulations_you_planted_one_tree_ = "CgkIw6a8t_gCEAIQBw"; // <GPGSID>
+        public const string leaderboard_high_score = "CgkIw6a8t_gCEAIQGg"; // <GPGSID>
+        public const string achievement_score_reached_1100 = "CgkIw6a8t_gCEAIQEg"; // <GPGSID>
+        public const string achievement_you_planted_two_trees = "CgkIw6a8t_gCEAIQGA"; // <GPGSID>
         public const string achievement_score_reached_1000 = "CgkIw6a8t_gCEAIQDw"; // <GPGSID>
         public const string achievement_played_for_first_time = "CgkIw6a8t_gCEAIQAQ"; // <GPGSID>
         public const string achievement_score_reached_800 = "CgkIw6a8t_gCEAIQDQ"; // <GPGSID>
@@ -40,6 +43,11 @@ public static class GPGSlds
         public const string achievement_score_reached_300 = "CgkIw6a8t_gCEAIQCA"; // <GPGSID>
         public const string achievement_score_reached_200 = "CgkIw6a8t_gCEAIQBQ"; // <GPGSID>
         public const string achievement_score_reached_100 = "CgkIw6a8t_gCEAIQBA"; // <GPGSID>
+        public const string achievement_score_reached_1500 = "CgkIw6a8t_gCEAIQFg"; // <GPGSID>
+        public const string event_planted_a_tree = "CgkIw6a8t_gCEAIQEQ"; // <GPGSID>
+        public const string achievement_you_planted_one_tree = "CgkIw6a8t_gCEAIQBw"; // <GPGSID>
+        public const string achievement_score_reached_2000 = "CgkIw6a8t_gCEAIQFw"; // <GPGSID>
+        public const string achievement_score_reached_1400 = "CgkIw6a8t_gCEAIQFQ"; // <GPGSID>
 
 }
 }

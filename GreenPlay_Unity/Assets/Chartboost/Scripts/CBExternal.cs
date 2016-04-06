@@ -231,7 +231,12 @@ namespace ChartboostSDK {
 		public static void setMediation(CBMediation mediator, string version) {
 			Log("Unity : setMediation to = " + mediator.ToString() + " " + version);
 		}
-		
+
+		public static Boolean isWebViewEnabled() {
+			Log("Unity : isWebViewEnabled");
+			return false;
+		}
+
 #elif UNITY_IPHONE
 		[DllImport("__Internal")]
 		private static extern void _chartBoostInit(string appId, string appSignature, string unityVersion);
@@ -956,7 +961,10 @@ namespace ChartboostSDK {
 			_plugin.Call("setMediation", mediator.ToString(), version);
 			Log("Android : setMediation to = " + mediator.ToString() + " " + version);
 		}
-		
+
+		public static Boolean isWebViewEnabled() {
+			return _plugin.Call<bool>("isWebViewEnabled");
+		}
 #endif
 	}
 }

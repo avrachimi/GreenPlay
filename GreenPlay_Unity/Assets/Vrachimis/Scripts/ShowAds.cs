@@ -12,27 +12,15 @@ public class ShowAds : MonoBehaviour {
 
 	private bool closeScene = false;
 	private bool shownChartboost = false;
-	private bool shownAd = false;
+	private bool shownAd = true;
 	private bool failedToLoadAppLovin = true;
 	private bool failedToLoadInterstitial = true;
 	private bool failedToLoadMoreApps = true;
 	private Vector3 targetX;
 	private int randomNum = 0;
 	private string debg = "none";
-
-	public ResizeBackground resizeBackground;
 	// Use this for initialization
 	void Start () {
-		//Chartboost.showInterstitial(CBLocation.Default);
-		GameObject resizeBackgroundObject = GameObject.Find("Background");
-		if (resizeBackgroundObject != null)
-		{
-			resizeBackground = resizeBackgroundObject.GetComponent<ResizeBackground>();
-		}
-		if (resizeBackground == null)
-		{
-			Debug.Log ("Cannot find 'GameController' script");
-		}
 
 		GameObject gameManagerObject = GameObject.FindWithTag("GameManager");
 		if (gameManagerObject != null)
@@ -43,10 +31,6 @@ public class ShowAds : MonoBehaviour {
 		{
 			Debug.Log ("Cannot find 'GameController' script");
 		}
-
-		failedToLoadAppLovin = true;
-		AppLovin.SetUnityAdListener("AppLovin Object");
-		AppLovin.PreloadInterstitial();
 
 		if (!Chartboost.hasInterstitial(CBLocation.Default)) {
 			//Chartboost.showInterstitial(CBLocation.Default);
@@ -74,51 +58,16 @@ public class ShowAds : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		if (cameraPos.transform.position.x < 0.2f) {
-			randomNum = Random.Range(1, 7);
-			shownChartboost = true;
-			shownAd = false;
+
+	}
+
+	public void showAd()
+	{
+		if (shownAd == false) {
+			Chartboost.showInterstitial(CBLocation.Default);
 		}
-
-		targetX = new Vector3(2 * resizeBackground.worldScreenWidth,0,-10);
-		Debug.Log(targetX);
-		Debug.Log(cameraPos.transform.position);
-
-		
-		if (cameraPos.transform.position.x < targetX.x + 0.02f && cameraPos.transform.position.x > targetX.x - 0.02f && closeScene) {
-			//cameraPos.transform.position.x < targetX.x + 0.02f && cameraPos.transform.position.x > targetX.x - 0.02f && 
-			//Chartboost.showInterstitial(CBLocation.HomeScreen);
-			debg = "close scene";
-			closeScene = false;
-			//SceneManager.LoadScene(2);
-		}
-
-		if (cameraPos.transform.position.x < targetX.x + 0.02f && cameraPos.transform.position.x > targetX.x - 0.09f && shownChartboost == false && closeScene == false) {
-			Debug.Log("Applovin");
-			debg = "app lovin";
-			AppLovin.ShowInterstitial();
-			//shownAppLovin = false;
-			shownChartboost = true;
-			//shownAppLovin = true;
-		}
-		else if (cameraPos.transform.position.x < targetX.x + 0.02f && cameraPos.transform.position.x > targetX.x - 0.09f && closeScene == false && shownAd == false ) {
-			//AppLovin.ShowInterstitial();
-			debg = "chartboost";
-			Debug.Log("Chartboost");
-			if (randomNum <= 4 && failedToLoadInterstitial == false) {
-				Chartboost.showInterstitial(CBLocation.Default);
-			}
-			else if (randomNum > 4 && failedToLoadMoreApps == false) {
-				Chartboost.showMoreApps(CBLocation.GameOver);
-			}
-			else {
-				if (!failedToLoadInterstitial) Chartboost.showInterstitial(CBLocation.Default);
-				else if (!failedToLoadMoreApps) Chartboost.showMoreApps(CBLocation.GameOver);
-				else shownChartboost = false;
-			}
-
-			shownAd = true;
-			//shownAd = true;
+		else if (shownAd == true) {
+			gameManager.startGameGOS();
 		}
 	}
 
@@ -134,63 +83,8 @@ public class ShowAds : MonoBehaviour {
 			failedToLoadMoreApps = false;
 			Chartboost.cacheMoreApps(CBLocation.GameOver);
 		}
-
-		if (failedToLoadAppLovin) {
-			AppLovin.PreloadInterstitial();
-		}
 	}
-
-	void onAppLovinEventReceived(string ev)
-	{
-		Debug.Log(ev);
-		if (ev.Contains("REWARDAPPROVEDINFO"))
-		{
-			// Split the string into its three components.
-			//char[] delimiter = { '|' };
-			//string[] split = ev.Split(delimiter);
-			// Pull out and parse the amount of virtual currency.
-			//double amount = double.Parse(split[1]);
-			// Pull out the name of the virtual currency
-			//string currencyName = split[2];
-			// Do something with this info - for example, grant coins to the user
-			//myFunctionToUpdateBalance(currencyName, amount);
-		}
-		if (ev.Contains("DISPLAYEDINTER") || ev.Contains("VIDEOBEGAN"))
-		{
-			
-			Time.timeScale = 0.0f;
-			AudioListener.pause = true;
-		}
-		if (ev.Contains("HIDDENINTER") || ev.Contains("VIDEOSTOPPED"))
-		{
-			Time.timeScale = 1.0f;
-			AudioListener.pause = false;
-			//AppLovin.PreloadInterstitial();
-			closeScene = true;
-			shownChartboost = true;
-			shownAd = true;
-		}
-		if (ev.Contains("LOADEDINTER"))
-		{
-			// The last ad load was successful.
-			// Probably do AppLovin.ShowInterstitial();
-			//AppLovin.ShowInterstitial();
-			//shownAd = true;
-			//closeScene = true;
-			debg = "loaded app lovin";
-			failedToLoadAppLovin = false;
-		}
-		if (string.Equals(ev, "LOADINTERFAILED")) {
-			//AppLovin.PreloadInterstitial();
-			debg = "failed applovin";
-			failedToLoadAppLovin = true;
-
-		}
-		if (ev.Contains("CLICKED")) {
-			//save the score and high score
-			gameManager.save();
-		}
-	}
+		
 
 	void OnEnable() 
 	{
@@ -227,16 +121,18 @@ public class ShowAds : MonoBehaviour {
 	void didInitialize(bool status) {
 		AddLog(string.Format("didInitialize: {0}", status));
 		debg = "CB Init";
+		shownAd = false;
 
 	}
 
 	void didDisplayInterstitial(CBLocation location) {
 		shownChartboost = true;
-		shownAd = true;
+		shownAd = false;
 	}
 
 	void didCacheInterstitial(CBLocation location) {
 		failedToLoadInterstitial = false;
+		shownAd = false;
 	}
 
 	void didFailToLoadInterstitial(CBLocation location, CBImpressionError error) {
@@ -245,6 +141,7 @@ public class ShowAds : MonoBehaviour {
 		failedToLoadInterstitial = true;
 		shownChartboost = false;
 		shownAd = true;
+		showAd();
 		//closeScene = true;
 	}
 
@@ -254,6 +151,7 @@ public class ShowAds : MonoBehaviour {
 		closeScene = true;
 		shownChartboost = true; //not sure
 		shownAd = true;
+		showAd();
 	}
 
 	void didCloseInterstitial(CBLocation location) {
@@ -262,15 +160,19 @@ public class ShowAds : MonoBehaviour {
 		closeScene = true;
 		shownChartboost = true;
 		shownAd = true;
+		showAd();
 	}
 
 	void didClickMoreApps(CBLocation location) {
 		//save data
+		shownAd = true;
 		gameManager.save();
 	}
 
 	void didClickInterstitial(CBLocation location) {
 		//save data
+		shownAd = true;
+		showAd();
 		gameManager.save();
 	}
 
@@ -279,6 +181,7 @@ public class ShowAds : MonoBehaviour {
 		closeScene = true;
 		shownChartboost = false; //not sure
 		shownAd = true;
+		showAd();
 	}
 
 	// Called after a MoreApps page has been closed.
@@ -286,6 +189,7 @@ public class ShowAds : MonoBehaviour {
 		closeScene = true;
 		shownChartboost = true;
 		shownAd = true;
+		showAd();
 	}
 	// Called after a MoreApps page attempted to load from the Chartboost API
 	// servers but failed.

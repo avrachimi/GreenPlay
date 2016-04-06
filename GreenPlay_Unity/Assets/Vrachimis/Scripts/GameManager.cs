@@ -5,6 +5,7 @@ using GooglePlayGames;
 using GooglePlayGames.BasicApi;
 using UnityEngine.SocialPlatforms;
 
+
 public class GameManager : MonoBehaviour {
 
 	public GUIText scoreText;
@@ -18,12 +19,23 @@ public class GameManager : MonoBehaviour {
 	public GUIStyle playStyle;
 	public GUIStyle homeStyle;
 	public GUIStyle pauseStyle;
+	public GUIStyle restartStyle;
+	public GUIStyle soundStyle;
+	public GUIStyle muteStyle;
 	public Vector2 playPos;
 	public Vector2 homePos;
 	public Vector2 pausePos;
+	public Vector2 restartPos;
+	public Vector2 soundPos;
 	public Vector2 playSize;
 	public Vector2 homeSize;
 	public Vector2 pauseSize;
+	public Vector2 restartSize;
+	public Vector2 soundSize;
+
+	//public GoogleAnalyticsV4 googleAnalytics;
+	public AudioClip ding;
+	public ShowAds showAds;
 
 	private bool pausePressed = false;
 	private int score1Size = 3;
@@ -41,14 +53,26 @@ public class GameManager : MonoBehaviour {
 
 	private CupMovement cupMovement;
 
+	private bool isSoundOn = true;
+
 	// Use this for initialization
 	void Start () {
-
+		//googleAnalytics.StartSession();
 		Application.targetFrameRate = 60;
 		score1Size = 3;
 		score2Size = 3;
 		score3Size = 4;
 		score4Size = 4;
+
+		GameObject showAdsObject = GameObject.FindWithTag("GameManager");
+		if (showAdsObject != null)
+		{
+			showAds = showAdsObject.GetComponent <ShowAds>();
+		}
+		if (showAds == null)
+		{
+			Debug.Log ("Cannot find 'GameController' script");
+		}
 
 		Debug.Log("GameManager RUNS!");
 
@@ -66,9 +90,9 @@ public class GameManager : MonoBehaviour {
 		rb2dCircleDoor = circleDoor.GetComponent<Rigidbody2D>();
 		rb2dCircleDoor2 = circleDoor2.GetComponent<Rigidbody2D>();
 
-		InvokeRepeating("spawnCup",0f,2.2f); //2.922f
-		InvokeRepeating("spawnOxygen",0f,0.2f);
-
+		//InvokeRepeating("spawnCup",0f,2.2f); //2.922f
+		//InvokeRepeating("spawnOxygen",0f,0.2f);
+		startGame();
 		highScore = PlayerPrefs.GetInt("HighScore");
 	}
 	
@@ -81,6 +105,12 @@ public class GameManager : MonoBehaviour {
 		homeStyle.fixedHeight = Screen.height - (Screen.height * homeSize.y);
 		pauseStyle.fixedWidth = Screen.width - (Screen.width * pauseSize.x);
 		pauseStyle.fixedHeight = Screen.height - (Screen.height * pauseSize.y);
+		restartStyle.fixedWidth = Screen.width - (Screen.width * restartSize.x);
+		restartStyle.fixedHeight = Screen.height - (Screen.height * restartSize.y);
+		soundStyle.fixedWidth = Screen.width - (Screen.width * soundSize.x);
+		soundStyle.fixedHeight = Screen.height - (Screen.height * soundSize.y);
+		muteStyle.fixedWidth = Screen.width - (Screen.width * soundSize.x);
+		muteStyle.fixedHeight = Screen.height - (Screen.height * soundSize.y);
 
 
 		if (score.ToString().Length == 1) scoreText.fontSize = Mathf.Min(Screen.height,Screen.width)/score1Size;
@@ -94,17 +124,22 @@ public class GameManager : MonoBehaviour {
 		if (score > highScore) {
 			highScore = score;
 			PlayerPrefs.SetInt("HighScore", highScore);
-			// post highScore to leaderboard ID "CgkIw6a8t_gCEAIQBg")
-			Social.ReportScore(highScore, "CgkIw6a8t_gCEAIQBg", (bool success) => {
-				// handle success or failure
-			});
 
+
+		}
+
+		if (isSoundOn) {
+			AudioListener.pause = false;
+		}
+		else {
+			AudioListener.pause = true;
 		}
 
 	}
 
 	public void startGame()
 	{
+		//googleAnalytics.LogScreen("In Game");
 		cupsDestroyed = 0;
 		oxygenCounter = 0;
 		cupCounter = 0;
@@ -122,7 +157,49 @@ public class GameManager : MonoBehaviour {
 			Destroy(fooObj);
 		}
 
-		InvokeRepeating("spawnCup",0f,2.045f); //2.922f
+		CancelInvoke("spawnCup");
+		CancelInvoke("spawnOxygen");
+
+		GameObject temp = GameObject.FindGameObjectWithTag("Cup");
+		if (temp == null) {
+			InvokeRepeating("spawnCup",0.7f,2.045f); //2.922f
+		}
+		InvokeRepeating("spawnOxygen",0f,0.2f);
+
+		highScore = PlayerPrefs.GetInt("HighScore");
+		int vol = PlayerPrefs.GetInt("Volume");
+		if (vol == 1) {
+			isSoundOn = true;
+		}
+		else {
+			isSoundOn = false;
+		}
+	}
+
+	public void startGameGOS()
+	{
+		//googleAnalytics.LogScreen("In Game");
+		cupsDestroyed = 0;
+		oxygenCounter = 0;
+		cupCounter = 0;
+		score = 0;
+		updateScore();
+		scoreText.enabled = true;
+		cameraController.currentTime = 0f;
+		foreach(GameObject fooObj in GameObject.FindGameObjectsWithTag("Cup"))
+		{
+			Destroy(fooObj);
+		}
+
+		foreach(GameObject fooObj in GameObject.FindGameObjectsWithTag("atom"))
+		{
+			Destroy(fooObj);
+		}
+
+		CancelInvoke("spawnCup");
+		CancelInvoke("spawnOxygen");
+
+		InvokeRepeating("spawnCup",0.7f,2.045f); //2.922f
 		InvokeRepeating("spawnOxygen",0f,0.2f);
 
 		highScore = PlayerPrefs.GetInt("HighScore");	
@@ -136,6 +213,15 @@ public class GameManager : MonoBehaviour {
 			Social.ReportProgress("CgkIw6a8t_gCEAIQAQ", 100.0f, (bool success) => {
 				// handle success or failure
 			});
+
+			// post highScore to leaderboard ID "CgkIw6a8t_gCEAIQBg")
+			Social.ReportScore(highScore, "CgkIw6a8t_gCEAIQEA", (bool success) => {
+				// handle success or failure
+				if (success) PlayGamesPlatform.Instance.Events.IncrementEvent("CgkIw6a8t_gCEAIQEQ", 1);
+			});
+
+			// Builder Hit with all Event parameters.
+			//googleAnalytics.LogEvent("Achievement","Unlocked", "Planted Tree", 1);
 		}
 
 		if (score == 50) {
@@ -152,6 +238,7 @@ public class GameManager : MonoBehaviour {
 			Social.ReportProgress("CgkIw6a8t_gCEAIQBA", 100.0f, (bool success) => {
 				// handle success or failure
 			});
+			PlayGamesPlatform.Instance.Events.IncrementEvent("CgkIw6a8t_gCEAIQEQ", 1);
 		}
 		else if (score == 200) {
 			Social.ReportProgress("CgkIw6a8t_gCEAIQBQ", 100.0f, (bool success) => {
@@ -163,15 +250,24 @@ public class GameManager : MonoBehaviour {
 				// handle success or failure
 			});
 		}
+		else if (score == 315) {
+			Social.ReportProgress("CgkIw6a8t_gCEAIQBw", 100.0f, (bool success) => {
+				// handle success or failure
+			});
+		}
 		else if (score == 400) {
 			Social.ReportProgress("CgkIw6a8t_gCEAIQCQ", 100.0f, (bool success) => {
 				// handle success or failure
 			});
+
+
 		}
 		else if (score == 500) {
 			Social.ReportProgress("CgkIw6a8t_gCEAIQCg", 100.0f, (bool success) => {
 				// handle success or failure
 			});
+
+
 		}
 		else if (score == 600) {
 			Social.ReportProgress("CgkIw6a8t_gCEAIQCw", 100.0f, (bool success) => {
@@ -180,6 +276,11 @@ public class GameManager : MonoBehaviour {
 		}
 		else if (score == 700) {
 			Social.ReportProgress("CgkIw6a8t_gCEAIQDA", 100.0f, (bool success) => {
+				// handle success or failure
+			});
+		}
+		else if (score == 715) {
+			Social.ReportProgress("CgkIw6a8t_gCEAIQGA", 100.0f, (bool success) => {
 				// handle success or failure
 			});
 		}
@@ -197,8 +298,13 @@ public class GameManager : MonoBehaviour {
 			Social.ReportProgress("CgkIw6a8t_gCEAIQDw", 100.0f, (bool success) => {
 				// handle success or failure
 			});
+
+			Social.ReportProgress("CgkIw6a8t_gCEAIQGA", 100.0f, (bool success) => {
+				// handle success or failure
+			});
 		}
 		//score = amount;
+		//AudioSource.PlayClipAtPoint( ding, transform.position);
 		updateScore();
 	}
 
@@ -258,7 +364,27 @@ public class GameManager : MonoBehaviour {
 				Time.timeScale = 1;
 				SceneManager.LoadScene(0);
 			}
+			if (GUI.Button(new Rect(Screen.width/2 - (Screen.width * restartPos.x ), Screen.height/2 - (Screen.height * restartPos.y),Screen.width - (Screen.width * restartSize.x),Screen.height - (Screen.height * restartSize.y)),"",restartStyle)) {
+				save();
+				pausePressed = false;
+				Time.timeScale = 1;
+				Debug.Log("RESTART");
+				//startGame();
+				startGameGOS();
+				//showAds.showAd();
+			}
 
+		}
+
+		if (isSoundOn) {
+			if (GUI.Button(new Rect(Screen.width/2 - (Screen.width * soundPos.x ), Screen.height/2 - (Screen.height * soundPos.y), Screen.width - (Screen.width * soundSize.x) , Screen.height - (Screen.height * soundSize.y)),"",soundStyle)) {
+				toggleSound();
+			}
+		}
+		else {
+			if (GUI.Button(new Rect(Screen.width/2 - (Screen.width * soundPos.x ), Screen.height/2 - (Screen.height * soundPos.y), Screen.width - (Screen.width * soundSize.x) , Screen.height - (Screen.height * soundSize.y)),"",muteStyle)) {
+				toggleSound();
+			}
 		}
 	}
 
@@ -273,6 +399,18 @@ public class GameManager : MonoBehaviour {
 		{
 			Time.timeScale = 0f;
 			return(true);    
+		}
+	}
+
+	void toggleSound()
+	{
+		if (isSoundOn) {
+			isSoundOn = false;
+			PlayerPrefs.SetInt("Volume", 0);
+		}
+		else {
+			isSoundOn = true;
+			PlayerPrefs.SetInt("Volume", 1);
 		}
 	}
 
@@ -329,6 +467,9 @@ public class GameManager : MonoBehaviour {
 		PlayerPrefs.SetInt("Score", score);
 		PlayerPrefs.Save();
 
-
+		// post highScore to leaderboard ID "CgkIw6a8t_gCEAIQBg")
+		Social.ReportScore(highScore, "CgkIw6a8t_gCEAIQGg", (bool success) => {
+			// handle success or failure
+		});
 	}
 }

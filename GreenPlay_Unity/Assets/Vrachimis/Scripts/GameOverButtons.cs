@@ -3,6 +3,8 @@ using System.Collections;
 using UnityEngine.SceneManagement;
 using GooglePlayGames;
 using UnityEngine.SocialPlatforms;
+using OnePF;
+using System.Collections.Generic;
 
 public class GameOverButtons : MonoBehaviour {
 
@@ -42,8 +44,64 @@ public class GameOverButtons : MonoBehaviour {
 	public Vector2 buyCoinsSize;
 	public Vector2 buyMoneySize;
 	public Vector2 shopSize;
+
+
+
+	//OpenIAB
+	const string SKU = "sku";
+
+	string _label = "";
+	bool _isInitialized = false;
+	Inventory _inventory = null;
+
+	private bool hasNoAds = false;
+
+
+
+	private void OnEnable()
+	{
+		// Listen to all events for illustration purposes
+		OpenIABEventManager.billingSupportedEvent += billingSupportedEvent;
+		OpenIABEventManager.billingNotSupportedEvent += billingNotSupportedEvent;
+		OpenIABEventManager.queryInventorySucceededEvent += queryInventorySucceededEvent;
+		OpenIABEventManager.queryInventoryFailedEvent += queryInventoryFailedEvent;
+		OpenIABEventManager.purchaseSucceededEvent += purchaseSucceededEvent;
+		OpenIABEventManager.purchaseFailedEvent += purchaseFailedEvent;
+		OpenIABEventManager.consumePurchaseSucceededEvent += consumePurchaseSucceededEvent;
+		OpenIABEventManager.consumePurchaseFailedEvent += consumePurchaseFailedEvent;
+	}
+	private void OnDisable()
+	{
+		// Remove all event handlers
+		OpenIABEventManager.billingSupportedEvent -= billingSupportedEvent;
+		OpenIABEventManager.billingNotSupportedEvent -= billingNotSupportedEvent;
+		OpenIABEventManager.queryInventorySucceededEvent -= queryInventorySucceededEvent;
+		OpenIABEventManager.queryInventoryFailedEvent -= queryInventoryFailedEvent;
+		OpenIABEventManager.purchaseSucceededEvent -= purchaseSucceededEvent;
+		OpenIABEventManager.purchaseFailedEvent -= purchaseFailedEvent;
+		OpenIABEventManager.consumePurchaseSucceededEvent -= consumePurchaseSucceededEvent;
+		OpenIABEventManager.consumePurchaseFailedEvent -= consumePurchaseFailedEvent;
+	}
+
 	// Use this for initialization
 	void Start () {
+		var googlePublicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAh11RsO7eMO39cIUOoagxcaYmymF8i7bOSZ6N29fr0XpAoT3dLSlKmgwGnxkFfskcX7NowO1lMZRIw1GMPCdGNYPj0W/cZneRuCdSsiFJJ18wiRI6FeYrTXe9LyCXmnkhGfAEuKxoXCN5HdZDFi4/RugQTyqsn0RTDoSZysofdRo9CwC0d8ei4vS77Ys3aeLPpwGoJXCRYhGk8VGzdl5KkwLcs0mINAz4YO7/SwS6mxXEhpL2/uBWLCXEyO9XAIMoWCxz4eXpJoukljykQERPq07Ba090AVp0iYd7n5Q16yplyCRdE+ZYigb3dBymDHOanu63tuRQ1cwQUVNJM3AEOwIDAQAB";
+
+		var options = new Options();
+		options.checkInventoryTimeoutMs = Options.INVENTORY_CHECK_TIMEOUT_MS * 2;
+		options.discoveryTimeoutMs = Options.DISCOVER_TIMEOUT_MS * 2;
+		options.checkInventory = false;
+		options.verifyMode = OptionsVerifyMode.VERIFY_SKIP;
+		options.prefferedStoreNames = new string[] { OpenIAB_Android.STORE_AMAZON };
+		options.availableStoreNames = new string[] { OpenIAB_Android.STORE_AMAZON };
+		options.storeKeys = new Dictionary<string, string> { {OpenIAB_Android.STORE_GOOGLE, googlePublicKey} };
+		//options.storeKeys = new Dictionary<string, string> { { OpenIAB_Android.STORE_YANDEX, yandexPublicKey } };
+		//options.storeKeys = new Dictionary<string, string> { { OpenIAB_Android.STORE_SLIDEME, slideMePublicKey } };
+		options.storeSearchStrategy = SearchStrategy.INSTALLER_THEN_BEST_FIT;
+
+		// Transmit options and start the service
+		OpenIAB.init(options);
+
 		score = PlayerPrefs.GetInt("Score");
 		highScore = PlayerPrefs.GetInt("HighScore");
 		highScoreStyle.fontSize = Mathf.Min(Screen.height,Screen.width)/10;
@@ -175,12 +233,13 @@ public class GameOverButtons : MonoBehaviour {
 							//SceneManager.LoadScene(1);
 							transform.position = new Vector3(0,0,-10);
 							Time.timeScale = 1;
-							gameManager.startGame();
+							gameManager.startGameGOS();
 						}
 						else if (hit.collider.name == "NoAds" && inShop == false) {
 							Debug.Log ("ADS");
 							//open No Ads app in the App Store
 							//Application.OpenURL("https://play.google.com/store/apps/details?id=com.lego.nexoknights.merlok&hl=en");
+							OpenIAB.purchaseProduct("no_ads");
 
 						}
 						else if (hit.collider.name == "Store") {
@@ -203,5 +262,55 @@ public class GameOverButtons : MonoBehaviour {
 				}
 			}
 		}
+	}
+
+
+
+
+	private void billingSupportedEvent()
+	{
+		_isInitialized = true;
+		Debug.Log("billingSupportedEvent");
+	}
+	private void billingNotSupportedEvent(string error)
+	{
+		Debug.Log("billingNotSupportedEvent: " + error);
+	}
+	private void queryInventorySucceededEvent(Inventory inventory)
+	{
+		Debug.Log("queryInventorySucceededEvent: " + inventory);
+		if (inventory != null)
+		{
+			_label = inventory.ToString();
+			_inventory = inventory;
+		}
+	}
+	private void queryInventoryFailedEvent(string error)
+	{
+		Debug.Log("queryInventoryFailedEvent: " + error);
+		_label = error;
+	}
+	private void purchaseSucceededEvent(Purchase purchase)
+	{
+		Debug.Log("purchaseSucceededEvent: " + purchase);
+		_label = "PURCHASED:" + purchase.ToString();
+		hasNoAds = true;
+		SceneManager.LoadScene(0);
+	}
+	private void purchaseFailedEvent(int errorCode, string errorMessage)
+	{
+		Debug.Log("purchaseFailedEvent: " + errorMessage);
+		_label = "Purchase Failed: " + errorMessage;
+		hasNoAds = false;
+	}
+	private void consumePurchaseSucceededEvent(Purchase purchase)
+	{
+		Debug.Log("consumePurchaseSucceededEvent: " + purchase);
+		_label = "CONSUMED: " + purchase.ToString();
+	}
+	private void consumePurchaseFailedEvent(string error)
+	{
+		Debug.Log("consumePurchaseFailedEvent: " + error);
+		_label = "Consume Failed: " + error;
 	}
 }
