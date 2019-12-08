@@ -1,6 +1,4 @@
 # GreenPlay
-Install git-lfs -> https://git-lfs.github.com/
-Setup android sdk in Unity
-install github desktop
-pull before opening Unity and then open Unity to work on project
-Workflow -> http://nvie.com/posts/a-successful-git-branching-model/
+UPDATE: This a very old repo with a lot of bugs and coding mistakes. Feel free to use any of my code. Please keep in mind that this was my first game with Unity and it was built in only a month. This is not supposed to be a finished product.
+
+GreenPlay is an Android game created to compete in the Junior Achievement Competition. We are a team of 4 high school students.
